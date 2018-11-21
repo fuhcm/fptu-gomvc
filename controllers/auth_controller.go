@@ -21,7 +21,7 @@ type AuthParams struct {
 
 // AuthResponse ...
 type AuthResponse struct {
-	JWT       string `json:"jwt"`
+	JWT       string `json:"token"`
 	ExpiresAt int64  `json:"expire_at"`
 	ID        int    `json:"id"`
 }
@@ -65,7 +65,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mySigningKey := []byte(os.Getenv("JWT_SECRET"))
-	expireTime := time.Now().Add(time.Hour * 24 * 1).Unix()
+	expireTime := time.Now().Add(time.Hour * 24 * 3).Unix()
 
 	// Create the Claims
 	claims := &jwt.StandardClaims{

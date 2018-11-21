@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gosu-team/cfapp-api/lib"
@@ -37,10 +38,37 @@ func getUserIDFromHeader(r *http.Request) int {
 	return 0
 }
 
+type confessionElement struct {
+	ID        int        `json:"id"`
+	CreatedAt *time.Time `json:"created_at, omitempty"`
+	UpdatedAt *time.Time `json:"updated_at, omitempty"`
+	Content   string     `json:"content"`
+	Status    int        `json:"status"`
+	Approver  string     `json:"approver"`
+	Reason    string     `json:"reason"`
+	CfsID     int        `json:"cfs_id"`
+}
+
+type confessionCollection []confessionElement
+
+func confessionsResponseResolve(arr []models.Confession) confessionCollection {
+	var collection confessionCollection
+	for _, e := range arr {
+		// Mapping approver email
+		user := new(models.User)
+		approverEmail := user.FetchEmailByID(e.Approver)
+
+		e := confessionElement{e.ID, e.CreatedAt, e.UpdatedAt, e.Content, e.Status, approverEmail, e.Reason, e.CfsID}
+		collection = append(collection, e)
+	}
+
+	return collection
+}
+
 // GetAllConfessionsHandler ...
 func GetAllConfessionsHandler(w http.ResponseWriter, r *http.Request) {
 	// Number of element to query
-	numLoad, err := strconv.Atoi(r.URL.Query().Get("numLoad"))
+	numLoad, err := strconv.Atoi(r.URL.Query().Get("load"))
 	if err != nil {
 		numLoad = 10
 	}
@@ -48,7 +76,34 @@ func GetAllConfessionsHandler(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
 	confession := new(models.Confession)
 	confessions := confession.FetchAll(numLoad)
-	res.SendOK(confessions)
+
+	collection := confessionsResponseResolve(confessions)
+
+	res.SendOK(collection)
+}
+
+type requestConfessionBySenderRequest struct {
+	Token string `json:"token"`
+}
+
+// GetConfessionsBySenderHandler ...
+func GetConfessionsBySenderHandler(w http.ResponseWriter, r *http.Request) {
+	// Number of element to query
+	numLoad, err := strconv.Atoi(r.URL.Query().Get("load"))
+	if err != nil {
+		numLoad = 10
+	}
+
+	req := lib.Request{ResponseWriter: w, Request: r}
+	res := lib.Response{ResponseWriter: w}
+
+	confession := new(models.Confession)
+	tokenRequest := new(requestConfessionBySenderRequest)
+	req.GetJSONBody(tokenRequest)
+
+	confessions := confession.FetchBySender(tokenRequest.Token, numLoad)
+	collection := confessionsResponseResolve(confessions)
+	res.SendOK(collection)
 }
 
 // CreateConfessionHandler ...
@@ -65,17 +120,6 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res.SendCreated(confession)
-}
-
-// GetConfessionsBySenderHandler ...
-func GetConfessionsBySenderHandler(w http.ResponseWriter, r *http.Request) {
-	req := lib.Request{ResponseWriter: w, Request: r}
-	res := lib.Response{ResponseWriter: w}
-
-	confession := new(models.Confession)
-	req.GetJSONBody(confession)
-	confessions := confession.FetchBySender(confession.Sender)
-	res.SendOK(confessions)
 }
 
 // Overview ...

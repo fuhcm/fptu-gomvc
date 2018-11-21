@@ -56,6 +56,15 @@ func (u *User) FetchByEmail() error {
 	return nil
 }
 
+// FetchEmailByID ...
+func (u *User) FetchEmailByID(userID int) string {
+	db := config.GetDatabaseConnection()
+
+	db.Where("id = ?", userID).Take(&u)
+
+	return u.Email
+}
+
 // Create ...
 func (u *User) Create() error {
 	db := config.GetDatabaseConnection()

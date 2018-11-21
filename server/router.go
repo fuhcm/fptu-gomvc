@@ -56,12 +56,12 @@ func NewRouter() *mux.Router {
 	mainRouter.Methods("DELETE").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.DeleteUserHandler))
 
 	// Confession routes
-	mainRouter.Methods("GET").Path(apiPrefix + "/confessions").Handler(privateRoute(controllers.GetAllConfessionsHandler))
+	mainRouter.Methods("GET").Path(apiPrefix + "/admincp/confessions").Handler(privateRoute(controllers.GetAllConfessionsHandler))
 	mainRouter.Methods("POST").Path(apiPrefix + "/confessions").HandlerFunc(controllers.CreateConfessionHandler)
 	mainRouter.Methods("POST").Path(apiPrefix + "/myconfess").HandlerFunc(controllers.GetConfessionsBySenderHandler)
 	mainRouter.Methods("GET").Path(apiPrefix + "/confessions/overview").HandlerFunc(controllers.GetConfessionsOverviewHandler)
-	mainRouter.Methods("POST").Path(apiPrefix + "/confessions/approve").Handler(privateRoute(controllers.ApproveConfessionHandler))
-	mainRouter.Methods("POST").Path(apiPrefix + "/confessions/reject").Handler(privateRoute(controllers.RejectConfessionHandler))
+	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(privateRoute(controllers.ApproveConfessionHandler))
+	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/reject").Handler(privateRoute(controllers.RejectConfessionHandler))
 
 	return mainRouter
 }

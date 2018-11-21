@@ -81,11 +81,11 @@ func (c *Confession) Save() error {
 }
 
 // FetchBySender ...
-func (c *Confession) FetchBySender(sender string) []Confession {
+func (c *Confession) FetchBySender(sender string, numLoad int) []Confession {
 	db := config.GetDatabaseConnection()
 
 	var confessions []Confession
-	db.Order("id desc").Where("sender = ?", sender).Find(&confessions)
+	db.Order("id desc").Limit(numLoad).Where("sender = ?", sender).Find(&confessions)
 
 	return confessions
 }

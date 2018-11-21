@@ -77,7 +77,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	ss, err := token.SignedString(mySigningKey)
 
 	if err != nil {
-		res.SendBadRequest("unknown error")
+		res.SendBadRequest("Unknown error")
 		return
 	}
 

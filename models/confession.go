@@ -104,17 +104,11 @@ func (c *Confession) FetchOverview() (int, int, int) {
 
 func (c *Confession) getNextConfession() int {
 	db := config.GetDatabaseConnection()
-
-	err := db.Where("status = ?", 1).Order("cfs_id desc").First(&c).Error
-	if err != nil {
-		return 1
-	}
-
+	db.Order("cfs_id desc").Take(&c)
 	return c.CfsID + 1
 }
 
-// SetConfessionApproved ...
-func (c *Confession) SetConfessionApproved(status int, approver int, cfsID int) {
+func (c *Confession) setConfessionApproved(status int, approver int, cfsID int) {
 	c.Status = status
 	c.Approver = approver
 	c.CfsID = cfsID
@@ -130,7 +124,9 @@ func (c *Confession) ApproveConfession(approverID int) error {
 		return errors.New("Status of confession must be pending to be approved")
 	}
 
-	c.SetConfessionApproved(1, approverID, c.getNextConfession())
+	confessions := new(Confession)
+
+	c.setConfessionApproved(1, approverID, confessions.getNextConfession())
 
 	if err := c.Save(); err != nil {
 		return errors.New("Unable to update approved confession`")
@@ -139,8 +135,7 @@ func (c *Confession) ApproveConfession(approverID int) error {
 	return nil
 }
 
-// SetConfessionRejected ...
-func (c *Confession) SetConfessionRejected(status int, approver int, reason string) {
+func (c *Confession) setConfessionRejected(status int, approver int, reason string) {
 	c.Status = status
 	c.Approver = approver
 	c.Reason = reason
@@ -156,7 +151,7 @@ func (c *Confession) RejectConfession(approverID int, reason string) error {
 		return errors.New("Status of confession must be pending to be rejected")
 	}
 
-	c.SetConfessionRejected(2, approverID, reason)
+	c.setConfessionRejected(2, approverID, reason)
 
 	if err := c.Save(); err != nil {
 		return errors.New("Unable to update approved confession`")

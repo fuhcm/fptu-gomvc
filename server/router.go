@@ -49,7 +49,8 @@ func NewRouter() *mux.Router {
 
 	// User routes
 	mainRouter.Methods("GET").Path(apiPrefix + "/users").Handler(privateRoute(controllers.GetAllUsersHandler))
-	mainRouter.Methods("POST").Path(apiPrefix + "/users").Handler(privateRoute(controllers.CreateUserHandler))
+	// mainRouter.Methods("POST").Path(apiPrefix + "/users").Handler(privateRoute(controllers.CreateUserHandler))
+	mainRouter.Methods("POST").Path(apiPrefix + "/users").HandlerFunc(controllers.CreateUserHandler)
 	mainRouter.Methods("GET").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.GetUserByIDHandler))
 	mainRouter.Methods("PUT").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.UpdateUserHandler))
 	mainRouter.Methods("DELETE").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.DeleteUserHandler))

@@ -17,6 +17,7 @@ type User struct {
 	Email    string `json:"email" gorm:"not null; type:varchar(250); unique_index"`
 	Password string `json:"password" gorm:"not null; type:varchar(250)"`
 	Admin    string `json:"admin" gorm: "not null; type:boolean"`
+	Nickname string `json:"nickname" gorm: "type: varchar(250);"`
 }
 
 // TableName set User's table name to be `users`
@@ -63,6 +64,15 @@ func (u *User) FetchEmailByID(userID int) string {
 	db.Where("id = ?", userID).Take(&u)
 
 	return u.Email
+}
+
+// FetchNicknameByID ...
+func (u *User) FetchNicknameByID(userID int) string {
+	db := config.GetDatabaseConnection()
+
+	db.Where("id = ?", userID).Take(&u)
+
+	return u.Nickname
 }
 
 // Create ...

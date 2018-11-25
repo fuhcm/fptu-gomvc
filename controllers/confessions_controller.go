@@ -56,9 +56,9 @@ func confessionsResponseResolve(arr []models.Confession) confessionCollection {
 	for _, e := range arr {
 		// Mapping approver email
 		user := new(models.User)
-		approverEmail := user.FetchEmailByID(e.Approver)
+		approverNickname := user.FetchNicknameByID(e.Approver)
 
-		e := confessionElement{e.ID, e.CreatedAt, e.UpdatedAt, e.Content, e.Status, approverEmail, e.Reason, e.CfsID}
+		e := confessionElement{e.ID, e.CreatedAt, e.UpdatedAt, e.Content, e.Status, approverNickname, e.Reason, e.CfsID}
 		collection = append(collection, e)
 	}
 
@@ -161,6 +161,23 @@ func ApproveConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	res.SendOK(approveConfession)
 }
 
+// RollbackApproveConfessionHandler ...
+func RollbackApproveConfessionHandler(w http.ResponseWriter, r *http.Request) {
+	req := lib.Request{ResponseWriter: w, Request: r}
+	res := lib.Response{ResponseWriter: w}
+
+	approverID := getUserIDFromHeader(r)
+	approveConfession := new(models.Confession)
+	req.GetJSONBody(approveConfession)
+
+	if err := approveConfession.RollbackApproveConfession(approverID); err != nil {
+		res.SendBadRequest(err.Error())
+		return
+	}
+
+	res.SendOK(approveConfession)
+}
+
 // RejectConfessionRequest ...
 type RejectConfessionRequest struct {
 	ID     int    `json: "id"`
@@ -184,4 +201,22 @@ func RejectConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res.SendOK(rejectConfession)
+}
+
+// NextConfession ...
+type NextConfession struct {
+	ID int `json:"id"`
+}
+
+// GetNextConfessionNextIDHandler ...
+func GetNextConfessionNextIDHandler(w http.ResponseWriter, r *http.Request) {
+	res := lib.Response{ResponseWriter: w}
+
+	confession := new(models.Confession)
+	nextID := confession.GetNextConfessionID()
+	nextConfession := NextConfession{
+		ID: nextID,
+	}
+
+	res.SendOK(nextConfession)
 }

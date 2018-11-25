@@ -24,6 +24,7 @@ type AuthResponse struct {
 	JWT       string `json:"token"`
 	ExpiresAt int64  `json:"expire_at"`
 	ID        int    `json:"id"`
+	Nickname  string `json:"nickname"`
 }
 
 // Verify password
@@ -85,6 +86,50 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		JWT:       ss,
 		ExpiresAt: expireTime,
 		ID:        user.ID,
+		Nickname:  user.Nickname,
+	}
+
+	res.SendOK(jwtResponse)
+}
+
+// LoginHandlerWithoutPassword ...
+func LoginHandlerWithoutPassword(w http.ResponseWriter, r *http.Request) {
+	req := lib.Request{ResponseWriter: w, Request: r}
+	res := lib.Response{ResponseWriter: w}
+	authParams := new(AuthParams)
+	req.GetJSONBody(authParams)
+
+	user := models.User{
+		Email: authParams.Email,
+	}
+
+	if err := user.FetchByEmail(); err != nil {
+		res.SendBadRequest("User not found")
+		return
+	}
+
+	mySigningKey := []byte(os.Getenv("JWT_SECRET"))
+	expireTime := time.Now().Add(time.Hour * 24 * 3).Unix()
+
+	// Create the Claims
+	claims := &jwt.StandardClaims{
+		ExpiresAt: expireTime,
+		Id:        strconv.Itoa(user.ID),
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	ss, err := token.SignedString(mySigningKey)
+
+	if err != nil {
+		res.SendBadRequest("Unknown error")
+		return
+	}
+
+	jwtResponse := AuthResponse{
+		JWT:       ss,
+		ExpiresAt: expireTime,
+		ID:        user.ID,
+		Nickname:  user.Nickname,
 	}
 
 	res.SendOK(jwtResponse)

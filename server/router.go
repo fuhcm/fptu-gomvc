@@ -46,6 +46,7 @@ func NewRouter() *mux.Router {
 
 	// Auth routes
 	mainRouter.Methods("POST").Path("/auth/login").HandlerFunc(controllers.LoginHandler)
+	mainRouter.Methods("POST").Path("/auth/login_facebook").HandlerFunc(controllers.LoginHandlerWithoutPassword)
 
 	// User routes
 	mainRouter.Methods("GET").Path(apiPrefix + "/users").Handler(privateRoute(controllers.GetAllUsersHandler))
@@ -61,7 +62,11 @@ func NewRouter() *mux.Router {
 	mainRouter.Methods("POST").Path(apiPrefix + "/myconfess").HandlerFunc(controllers.GetConfessionsBySenderHandler)
 	mainRouter.Methods("GET").Path(apiPrefix + "/confessions/overview").HandlerFunc(controllers.GetConfessionsOverviewHandler)
 	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(privateRoute(controllers.ApproveConfessionHandler))
+	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/rollback_approve").Handler(privateRoute(controllers.RollbackApproveConfessionHandler))
 	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/reject").Handler(privateRoute(controllers.RejectConfessionHandler))
+
+	// Get NextID
+	mainRouter.Methods("GET").Path(apiPrefix + "/next_confession_id").HandlerFunc(controllers.GetNextConfessionNextIDHandler)
 
 	return mainRouter
 }

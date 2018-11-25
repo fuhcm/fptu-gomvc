@@ -102,7 +102,8 @@ func (c *Confession) FetchOverview() (int, int, int) {
 	return totalCount, pendingCount, rejectedCount
 }
 
-func (c *Confession) getNextConfession() int {
+// GetNextConfessionID ...
+func (c *Confession) GetNextConfessionID() int {
 	db := config.GetDatabaseConnection()
 	db.Order("cfs_id desc").Take(&c)
 	return c.CfsID + 1
@@ -126,10 +127,31 @@ func (c *Confession) ApproveConfession(approverID int) error {
 
 	confessions := new(Confession)
 
-	c.setConfessionApproved(1, approverID, confessions.getNextConfession())
+	c.setConfessionApproved(1, approverID, confessions.GetNextConfessionID())
 
 	if err := c.Save(); err != nil {
 		return errors.New("Unable to update approved confession`")
+	}
+
+	return nil
+}
+
+func (c *Confession) setConfessionUnapproved() {
+	c.Status = 0
+	c.Approver = 0
+	c.CfsID = 0
+}
+
+// RollbackApproveConfession ...
+func (c *Confession) RollbackApproveConfession(approverID int) error {
+	if err := c.FetchByID(); err != nil {
+		return errors.New("Could not find the confession")
+	}
+
+	c.setConfessionUnapproved()
+
+	if err := c.Save(); err != nil {
+		return errors.New("Unable to rollback approved confession`")
 	}
 
 	return nil

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gosu-team/cfapp-api/lib"
 )
@@ -50,14 +51,27 @@ func getFeeds(body []byte) (*FeedReponse, error) {
 	return f, err
 }
 
+func resolveMediumURL(url string) string {
+	urlParts := strings.Split(url, "/")
+	mediumChannel := urlParts[3]
+
+	return "https://medium.com/feed/" + mediumChannel
+}
+
 // GetPostsByURLHandler ...
 func GetPostsByURLHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.URL.Query().Get("url")
 
+	if strings.Contains(url, "https://medium.com/") {
+		url = resolveMediumURL(url)
+	} else {
+		url = url + "/feed"
+	}
+
 	res := lib.Response{ResponseWriter: w}
 
 	apiKey := os.Getenv("API_KEY")
-	resp, err := http.Get("https://api.rss2json.com/v1/api.json?rss_url=" + url + "/feed" + "&api_key=" + apiKey + "&count=10&order_by=pubDate")
+	resp, err := http.Get("https://api.rss2json.com/v1/api.json?rss_url=" + url + "&api_key=" + apiKey + "&count=10&order_by=pubDate")
 	if err != nil {
 		panic(err.Error())
 	}

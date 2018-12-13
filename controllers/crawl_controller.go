@@ -13,7 +13,6 @@ import (
 
 // Feed ...
 type Feed struct {
-	URL         string `json:"url"`
 	Title       string `json:"title"`
 	Link        string `json:"link"`
 	Author      string `json:"author"`
@@ -82,6 +81,11 @@ func GetPostsByURLHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	f, err := getFeeds([]byte(body))
+
+	if f.Status != "ok" {
+		res.SendBadRequest("Cannot crawl this page")
+		return
+	}
 
 	res.SendOK(f)
 }

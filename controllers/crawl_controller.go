@@ -59,15 +59,19 @@ func resolveMediumURL(url string) string {
 
 // GetPostsByURLHandler ...
 func GetPostsByURLHandler(w http.ResponseWriter, r *http.Request) {
+	res := lib.Response{ResponseWriter: w}
 	url := r.URL.Query().Get("url")
+
+	if len(url) == 0 {
+		res.SendNotFound()
+		return
+	}
 
 	if strings.Contains(url, "https://medium.com/") {
 		url = resolveMediumURL(url)
 	} else {
 		url = url + "/feed"
 	}
-
-	res := lib.Response{ResponseWriter: w}
 
 	apiKey := os.Getenv("API_KEY")
 	resp, err := http.Get("https://api.rss2json.com/v1/api.json?rss_url=" + url + "&api_key=" + apiKey + "&count=10&order_by=pubDate")

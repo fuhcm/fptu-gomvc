@@ -82,7 +82,7 @@ func GetPostsByURLHandler(w http.ResponseWriter, r *http.Request) {
 
 	f, err := getFeeds([]byte(body))
 
-	if f.Status != "ok" {
+	if f.Status != "ok" || len(f.Items) == 0 {
 		res.SendBadRequest("Cannot crawl this page")
 		return
 	}

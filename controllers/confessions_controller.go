@@ -8,8 +8,8 @@ import (
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/gosu-team/cfapp-api/lib"
-	"github.com/gosu-team/cfapp-api/models"
+	"github.com/gosu-team/fptu-api/lib"
+	"github.com/gosu-team/fptu-api/models"
 )
 
 func getUserIDFromHeader(r *http.Request) int {

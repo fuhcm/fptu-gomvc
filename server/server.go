@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/gosu-team/cfapp-api/middlewares"
+	"github.com/gosu-team/fptu-api/middlewares"
 	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/urfave/negroni"
 )

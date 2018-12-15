@@ -5,9 +5,9 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/gosu-team/cfapp-api/controllers"
-	"github.com/gosu-team/cfapp-api/lib"
-	"github.com/gosu-team/cfapp-api/middlewares"
+	"github.com/gosu-team/fptu-api/controllers"
+	"github.com/gosu-team/fptu-api/lib"
+	"github.com/gosu-team/fptu-api/middlewares"
 )
 
 func notFound(w http.ResponseWriter, r *http.Request) {

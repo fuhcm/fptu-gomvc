@@ -1,6 +1,6 @@
 #!/bin/sh
-fuser -n tcp -k 5001
 ssh root@gosu.team <<EOF
+    fuser -n tcp -k 5001
     cd /home/golang/src/github.com/gosu-team/fptu-api
     git checkout .
     git pull

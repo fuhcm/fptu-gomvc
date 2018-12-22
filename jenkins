@@ -3,6 +3,7 @@ ssh root@gosu.team <<EOF
     cd /home/golang/src/github.com/gosu-team/fptu-api
     git pull
     rm -rf main
+    export PATH=$PATH:/usr/local/go/bin
     go build cmd/app/main.go
     fuser -n tcp -k 5001
     nohup ./main &

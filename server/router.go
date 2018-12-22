@@ -12,7 +12,7 @@ import (
 
 func notFound(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
-	res.SendBadRequest("Bad!")
+	res.SendNotFound()
 }
 
 func privateRoute(controller http.HandlerFunc) http.Handler {

@@ -1,4 +1,5 @@
 #!/bin/sh
+fuser -n tcp -k 5001
 ssh root@gosu.team <<EOF
     cd /home/golang/src/github.com/gosu-team/fptu-api
     git checkout .
@@ -7,7 +8,7 @@ ssh root@gosu.team <<EOF
     export PATH=$PATH:/usr/local/go/bin
     export GOPATH=/home/golang
     go build cmd/app/main.go
-    fuser -n tcp -k 5001
-    nohup ./main &
     exit
 EOF
+cd /home/golang/src/github.com/gosu-team/fptu-api
+nohup ./main > output.log&

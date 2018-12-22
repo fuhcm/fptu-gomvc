@@ -12,7 +12,7 @@ import (
 
 func notFound(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
-	res.SendOK("Go server is running, this is default page, also a notfound page.")
+	res.SendNotFound()
 }
 
 func privateRoute(controller http.HandlerFunc) http.Handler {

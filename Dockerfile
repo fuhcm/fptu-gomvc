@@ -1,16 +1,22 @@
-# Run these command to create docker image & run docker container from image
-# docker build -t goapi .
-# sudo docker run -p 3000:3000 goapi
+FROM golang:1.10.3 as builder
 
-FROM golang:1.10.3
+COPY . $GOPATH/src/github.com/gosu-team/fptu-api/
+WORKDIR $GOPATH/src/github.com/gosu-team/fptu-api/
 
-RUN mkdir -p usr/src/app
+RUN go get -v -d ./cmd/app/
 
-WORKDIR usr/src/app
+RUN env GOOS=linux GOARCH=amd64 go build cmd/app/main.go
 
-COPY main .
-COPY .env .
+FROM scratch
 
-CMD ["./main"]
+COPY --from=builder /go/src/github.com/gosu-team/fptu-api/main /go/bin/main
 
 EXPOSE 3000
+
+ENTRYPOINT ["/go/bin/main"]
+
+# This is docker build command: 
+# sudo docker build -t fptu-api .
+
+# This is docker run command:
+# sudo docker run -dit -p 3000:3000 fptu-api:latest

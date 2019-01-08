@@ -15,4 +15,4 @@ CMD ["./main"]
 # sudo docker build -t fptu-api .
 
 # This is docker run command:
-# sudo docker run -dit -p 3000:3000 fptu-api:latest
+# sudo docker run -d --name fptu-api -p 5001:3000 fptu-api:latest

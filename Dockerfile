@@ -1,19 +1,15 @@
-FROM golang:1.10.3 as builder
+FROM golang:alpine as builder
+
+RUN apk update && apk add --no-cache git
 
 COPY . $GOPATH/src/github.com/gosu-team/fptu-api/
 WORKDIR $GOPATH/src/github.com/gosu-team/fptu-api/
 
 RUN go get -v -d ./cmd/app/
 
-RUN env GOOS=linux GOARCH=amd64 go build cmd/app/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/app/main.go
 
-FROM scratch
-
-COPY --from=builder /go/src/github.com/gosu-team/fptu-api/main /go/bin/main
-
-EXPOSE 3000
-
-ENTRYPOINT ["/go/bin/main"]
+CMD ["./main"]
 
 # This is docker build command: 
 # sudo docker build -t fptu-api .

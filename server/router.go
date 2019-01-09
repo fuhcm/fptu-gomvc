@@ -25,8 +25,8 @@ func privateRoute(controller http.HandlerFunc) http.Handler {
 }
 
 var pool = &redigo.Pool{
-	MaxIdle:     10,
-	MaxActive:   50,
+	MaxIdle:     5,
+	MaxActive:   10,
 	IdleTimeout: 300 * time.Second,
 	Wait:        false, // Important
 	Dial: func() (redigo.Conn, error) {

@@ -115,7 +115,7 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	req.GetJSONBody(confession)
 
 	if len(confession.Content) < 1 {
-		res.SendBadRequest(err.Error())
+		res.SendBadRequest("Too short!")
 		return
 	}
 

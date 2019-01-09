@@ -114,6 +114,11 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	confession := new(models.Confession)
 	req.GetJSONBody(confession)
 
+	if len(confession.Content) < 1 {
+		res.SendBadRequest(err.Error())
+		return
+	}
+
 	if err := confession.Create(); err != nil {
 		res.SendBadRequest(err.Error())
 		return

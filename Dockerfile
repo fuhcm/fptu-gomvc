@@ -9,6 +9,13 @@ RUN go get -v -d ./cmd/app/
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/app/main.go
 
+FROM alpine
+
+WORKDIR /root/src/app
+
+COPY --from=builder /go/src/github.com/gosu-team/fptu-api/main /root/src/app/main
+COPY --from=builder /go/src/github.com/gosu-team/fptu-api/.env /root/src/app/.env
+
 EXPOSE 3000
 
 ENTRYPOINT ["./main"]

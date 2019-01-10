@@ -9,10 +9,12 @@ RUN go get -v -d ./cmd/app/
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/app/main.go
 
-CMD ["./main"]
+EXPOSE 3000
+
+ENTRYPOINT ["./main"]
 
 # This is docker build command: 
-# sudo docker build -t fptu-api .
+# docker build -t fptu-api .
 
 # This is docker run command:
-# sudo docker run -d --name fptu-api -p 5001:3000 fptu-api:latest
+# docker run -d --name fptu-api -p 5001:3000 fptu-api:latest

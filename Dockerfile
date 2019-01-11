@@ -9,7 +9,9 @@ RUN go get -v -d ./cmd/app/
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/app/main.go
 
-FROM golang:alpine
+FROM alpine
+
+RUN apk --no-cache add ca-certificates rsync openssh
 
 WORKDIR /root/src/app
 

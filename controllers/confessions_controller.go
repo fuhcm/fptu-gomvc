@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -128,13 +127,7 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 
 	bool, err := captcha.VerifyNoRemoteIP(newConfession.Captcha)
 
-	if bool == true || err != nil {
-		// Track log
-		fmt.Println("Bool: ", bool)
-		fmt.Println("Err: ", err)
-		fmt.Println("Captcha secrect: ", recaptchaSecret)
-		fmt.Println("Captcha string: ", newConfession.Captcha)
-
+	if bool != true || err != nil {
 		res.SendBadRequest("Invalid captcha!")
 		return
 	}

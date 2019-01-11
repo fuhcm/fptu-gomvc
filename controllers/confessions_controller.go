@@ -130,7 +130,7 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// Track log
 		fmt.Println("Captcha secrect: ", recaptchaSecret)
-		fmt.Println("Captcha string: ", recaptchaSecret)
+		fmt.Println("Captcha string: ", newConfession.Captcha)
 
 		res.SendBadRequest("Invalid captcha!")
 		return

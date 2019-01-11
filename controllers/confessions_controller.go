@@ -11,7 +11,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gosu-team/fptu-api/lib"
 	"github.com/gosu-team/fptu-api/models"
-	recaptcha "gopkg.in/ezzarghili/recaptcha-go.v3"
+	recaptcha "gopkg.in/ezzarghili/recaptcha-go.v2"
 )
 
 func getUserIDFromHeader(r *http.Request) int {
@@ -124,10 +124,11 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Verify captcha
 	recaptchaSecret := os.Getenv("CAPTCHA")
-	captcha, _ := recaptcha.NewReCAPTCHA(recaptchaSecret, recaptcha.V2, 10*time.Second)
+	captcha, _ := recaptcha.NewReCAPTCHA(recaptchaSecret)
 
-	err := captcha.Verify(newConfession.Captcha)
-	if err != nil {
+	bool, err := captcha.VerifyNoRemoteIP(newConfession.Captcha)
+
+	if bool == true || err != nil {
 		// Track log
 		fmt.Println("Captcha secrect: ", recaptchaSecret)
 		fmt.Println("Captcha string: ", newConfession.Captcha)

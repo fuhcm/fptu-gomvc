@@ -74,7 +74,7 @@ func GetPostsByURLHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	apiKey := os.Getenv("API_KEY")
-	resp, err := http.Get("https://api.rss2json.com/v1/api.json?rss_url=" + url + "&api_key=" + apiKey + "&count=10&order_by=pubDate")
+	resp, err := http.Get("http://api.rss2json.com/v1/api.json?rss_url=" + url + "&api_key=" + apiKey + "&count=10&order_by=pubDate")
 	if err != nil {
 		panic(err.Error())
 	}

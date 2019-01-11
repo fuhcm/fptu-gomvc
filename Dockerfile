@@ -9,7 +9,7 @@ RUN go get -v -d ./cmd/app/
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/app/main.go
 
-FROM alpine
+FROM golang:alpine
 
 WORKDIR /root/src/app
 

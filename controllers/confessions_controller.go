@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -108,9 +109,9 @@ func GetConfessionsBySenderHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 type newConfessionRequest struct {
-	Content string `json:"content""`
-	Sender  string `json:"sender""`
-	Captcha string `json:"captcha""`
+	Content string `json:"content"`
+	Sender  string `json:"sender"`
+	Captcha string `json:"captcha"`
 }
 
 // CreateConfessionHandler ...
@@ -124,8 +125,13 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	// Verify captcha
 	recaptchaSecret := os.Getenv("CAPTCHA")
 	captcha, _ := recaptcha.NewReCAPTCHA(recaptchaSecret, recaptcha.V2, 10*time.Second)
+
 	err := captcha.Verify(newConfession.Captcha)
 	if err != nil {
+		// Track log
+		fmt.Println("Captcha secrect: ", recaptchaSecret)
+		fmt.Println("Captcha string: ", recaptchaSecret)
+
 		res.SendBadRequest("Invalid captcha!")
 		return
 	}

@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/VojtechVitek/ratelimit"
-	"github.com/VojtechVitek/ratelimit/memory"
+	// "github.com/VojtechVitek/ratelimit"
+	// "github.com/VojtechVitek/ratelimit/memory"
 	"github.com/gorilla/mux"
-	"github.com/gosu-team/fptu-api/redis"
+	// "github.com/gosu-team/fptu-api/redis"
 
 	redigo "github.com/gomodule/redigo/redis"
 	"github.com/gosu-team/fptu-api/controllers"
@@ -49,7 +49,7 @@ func NewRouter() *mux.Router {
 	mainRouter := mux.NewRouter().StrictSlash(true)
 	mainRouter.KeepContext = true
 
-	mainRouter.Use(ratelimit.Request(ratelimit.IP).Rate(5, 5*time.Second).LimitBy(redis.New(pool), memory.New()))
+	// mainRouter.Use(ratelimit.Request(ratelimit.IP).Rate(5, 5*time.Second).LimitBy(redis.New(pool), memory.New()))
 
 	// Handle 404
 	mainRouter.NotFoundHandler = http.HandlerFunc(notFound)

@@ -2,14 +2,9 @@ package app
 
 import (
 	"net/http"
-	"time"
 
-	// "github.com/VojtechVitek/ratelimit"
-	// "github.com/VojtechVitek/ratelimit/memory"
 	"github.com/gorilla/mux"
-	// "github.com/gosu-team/fptu-api/redis"
 
-	redigo "github.com/gomodule/redigo/redis"
 	"github.com/gosu-team/fptu-api/controllers"
 	"github.com/gosu-team/fptu-api/lib"
 	"github.com/gosu-team/fptu-api/middlewares"
@@ -24,32 +19,12 @@ func privateRoute(controller http.HandlerFunc) http.Handler {
 	return middlewares.JWTMiddleware().Handler(http.HandlerFunc(controller))
 }
 
-var pool = &redigo.Pool{
-	MaxIdle:     10,
-	MaxActive:   50,
-	IdleTimeout: 300 * time.Second,
-	Wait:        false, // Important
-	Dial: func() (redigo.Conn, error) {
-		c, err := redigo.DialTimeout("tcp", "127.0.0.1:6379", 200*time.Millisecond, 100*time.Millisecond, 100*time.Millisecond)
-		if err != nil {
-			return nil, err
-		}
-		return c, err
-	},
-	TestOnBorrow: func(c redigo.Conn, t time.Time) error {
-		_, err := c.Do("PING")
-		return err
-	},
-}
-
 // NewRouter ...
 func NewRouter() *mux.Router {
 
 	// Create main router
 	mainRouter := mux.NewRouter().StrictSlash(true)
 	mainRouter.KeepContext = true
-
-	// mainRouter.Use(ratelimit.Request(ratelimit.IP).Rate(5, 5*time.Second).LimitBy(redis.New(pool), memory.New()))
 
 	// Handle 404
 	mainRouter.NotFoundHandler = http.HandlerFunc(notFound)

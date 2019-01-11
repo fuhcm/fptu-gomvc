@@ -10,6 +10,7 @@ import (
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gosu-team/fptu-api/lib"
 	"github.com/gosu-team/fptu-api/models"
+	recaptcha "gopkg.in/ezzarghili/recaptcha-go.v3"
 )
 
 func getUserIDFromHeader(r *http.Request) int {
@@ -106,17 +107,37 @@ func GetConfessionsBySenderHandler(w http.ResponseWriter, r *http.Request) {
 	res.SendOK(collection)
 }
 
+type newConfessionRequest struct {
+	Content string `json:"content""`
+	Sender  string `json:"sender""`
+	Captcha string `json:"captcha""`
+}
+
 // CreateConfessionHandler ...
 func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	req := lib.Request{ResponseWriter: w, Request: r}
 	res := lib.Response{ResponseWriter: w}
 
-	confession := new(models.Confession)
-	req.GetJSONBody(confession)
+	newConfession := new(newConfessionRequest)
+	req.GetJSONBody(newConfession)
 
-	if len(confession.Content) < 1 {
+	// Verify captcha
+	recaptchaSecret := os.Getenv("CAPTCHA")
+	captcha, _ := recaptcha.NewReCAPTCHA(recaptchaSecret, recaptcha.V2, 10*time.Second)
+	err := captcha.Verify(newConfession.Captcha)
+	if err != nil {
+		res.SendBadRequest("Invalid captcha!")
+		return
+	}
+
+	if len(newConfession.Content) < 1 {
 		res.SendBadRequest("Too short!")
 		return
+	}
+
+	confession := models.Confession{
+		Content: newConfession.Content,
+		Sender:  newConfession.Sender,
 	}
 
 	if err := confession.Create(); err != nil {

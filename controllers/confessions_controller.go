@@ -130,6 +130,8 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 
 	if bool == true || err != nil {
 		// Track log
+		fmt.Println("Bool: ", bool)
+		fmt.Println("Err: ", err)
 		fmt.Println("Captcha secrect: ", recaptchaSecret)
 		fmt.Println("Captcha string: ", newConfession.Captcha)
 

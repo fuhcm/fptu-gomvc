@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	"github.com/gosu-team/fptu-api/cache"
+	"github.com/gosu-team/fptu-api/config"
 	"github.com/gosu-team/fptu-api/lib"
 )
 
@@ -162,8 +162,8 @@ func getDataFromURLs(urlArr []string) []Item {
 
 func getDataFromSite(name string) []Item {
 	// Reference to system cache
-	c := cache.GetCache()
-	defaultExpiration := cache.GetDefaultExpiration()
+	c := config.GetCache()
+	defaultExpiration := config.GetDefaultExpiration()
 
 	var urls []string
 	switch name {

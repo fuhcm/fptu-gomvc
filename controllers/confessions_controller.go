@@ -264,3 +264,21 @@ func GetNextConfessionNextIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	res.SendOK(nextConfession)
 }
+
+// SearchConfessionsHandler ...
+func SearchConfessionsHandler(w http.ResponseWriter, r *http.Request) {
+	res := lib.Response{ResponseWriter: w}
+
+	// Number of element to query
+	keyword := r.URL.Query().Get("q")
+	keyword = strings.TrimSpace(keyword)
+	if keyword == "" {
+		res.SendBadRequest("Nothing to search!")
+		return
+	}
+
+	confession := new(models.Confession)
+	confessions := confession.SearchConfession(keyword)
+	collection := confessionsResponseResolve(confessions)
+	res.SendOK(collection)
+}

@@ -65,6 +65,7 @@ func NewRouter() *mux.Router {
 	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(privateRoute(controllers.ApproveConfessionHandler))
 	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/rollback_approve").Handler(privateRoute(controllers.RollbackApproveConfessionHandler))
 	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/reject").Handler(privateRoute(controllers.RejectConfessionHandler))
+	mainRouter.Methods("GET").Path(apiPrefix + "/confessions/search").HandlerFunc(controllers.SearchConfessionsHandler)
 
 	// Get NextID
 	mainRouter.Methods("GET").Path(apiPrefix + "/next_confession_id").HandlerFunc(controllers.GetNextConfessionNextIDHandler)

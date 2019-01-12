@@ -133,7 +133,7 @@ func findArticleByID(name string, items []Item, id string) int {
 				return index
 			}
 		case "codedao":
-			if v.GUID == "http://toidicodedao.com/?p="+id {
+			if v.GUID == "http://toidicodedao.com/?p="+id || v.GUID == "http://codeaholicguy.com/?p="+id {
 				return index
 			}
 		case "fpt":

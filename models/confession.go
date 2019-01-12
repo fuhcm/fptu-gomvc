@@ -102,6 +102,16 @@ func (c *Confession) FetchOverview() (int, int, int) {
 	return totalCount, pendingCount, rejectedCount
 }
 
+// FetchApprovedConfession ...
+func (c *Confession) FetchApprovedConfession(numLoad int) []Confession {
+	db := config.GetDatabaseConnection()
+
+	var confessions []Confession
+	db.Order("id desc").Limit(numLoad).Where("status = 1").Find(&confessions)
+
+	return confessions
+}
+
 // GetNextConfessionID ...
 func (c *Confession) GetNextConfessionID() int {
 	db := config.GetDatabaseConnection()

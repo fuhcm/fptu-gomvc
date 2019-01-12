@@ -60,6 +60,7 @@ func NewRouter() *mux.Router {
 	mainRouter.Methods("GET").Path(apiPrefix + "/admincp/confessions").Handler(privateRoute(controllers.GetAllConfessionsHandler))
 	mainRouter.Methods("POST").Path(apiPrefix + "/confessions").HandlerFunc(controllers.CreateConfessionHandler)
 	mainRouter.Methods("POST").Path(apiPrefix + "/myconfess").HandlerFunc(controllers.GetConfessionsBySenderHandler)
+	mainRouter.Methods("GET").Path(apiPrefix + "/confessions/approved").HandlerFunc(controllers.GetApprovedConfessionsHandler)
 	mainRouter.Methods("GET").Path(apiPrefix + "/confessions/overview").HandlerFunc(controllers.GetConfessionsOverviewHandler)
 	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(privateRoute(controllers.ApproveConfessionHandler))
 	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/rollback_approve").Handler(privateRoute(controllers.RollbackApproveConfessionHandler))

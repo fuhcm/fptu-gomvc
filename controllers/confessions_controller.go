@@ -107,6 +107,22 @@ func GetConfessionsBySenderHandler(w http.ResponseWriter, r *http.Request) {
 	res.SendOK(collection)
 }
 
+// GetApprovedConfessionsHandler ...
+func GetApprovedConfessionsHandler(w http.ResponseWriter, r *http.Request) {
+	res := lib.Response{ResponseWriter: w}
+
+	// Number of element to query
+	numLoad, err := strconv.Atoi(r.URL.Query().Get("load"))
+	if err != nil {
+		numLoad = 10
+	}
+
+	confession := new(models.Confession)
+	confessions := confession.FetchApprovedConfession(numLoad)
+	collection := confessionsResponseResolve(confessions)
+	res.SendOK(collection)
+}
+
 type newConfessionRequest struct {
 	Content string `json:"content"`
 	Sender  string `json:"sender"`

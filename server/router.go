@@ -69,7 +69,8 @@ func NewRouter() *mux.Router {
 	mainRouter.Methods("GET").Path(apiPrefix + "/next_confession_id").HandlerFunc(controllers.GetNextConfessionNextIDHandler)
 
 	// Crawl
-	mainRouter.Methods("GET").Path("/crawl").HandlerFunc(controllers.GetPostsByURLHandler)
+	mainRouter.Methods("GET").Path("/crawl/{name}").HandlerFunc(controllers.GetHomeFeedHandler)
+	mainRouter.Methods("GET").Path("/crawl/{name}/{id}").HandlerFunc(controllers.GetPostFeedHandler)
 
 	return mainRouter
 }

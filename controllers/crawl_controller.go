@@ -8,8 +8,23 @@ import (
 	"os"
 	"strings"
 
+	"github.com/gorilla/mux"
+	"github.com/gosu-team/fptu-api/cache"
 	"github.com/gosu-team/fptu-api/lib"
 )
+
+// MediumURLs ...
+var MediumURLs = []string{"https://codeburst.io",
+	"https://medium.freecodecamp.org",
+	"https://hackernoon.com",
+	"https://medium.com/javascript-scene",
+	"https://medium.com/dev-channel"}
+
+// FPTURLs ...
+var FPTURLs = []string{"https://daihoc.fpt.edu.vn"}
+
+// CodeDaoURLS ...
+var CodeDaoURLS = []string{"https://toidicodedao.com", "https://codeaholicguy.com/"}
 
 // Feed ...
 type Feed struct {
@@ -33,11 +48,25 @@ type Item struct {
 	Categories  []string `json:"categories"`
 }
 
+// MiniItem ...
+type MiniItem struct {
+	Title       string `json:"title"`
+	PubDate     string `json:"pubDate"`
+	GUID        string `json:"guid"`
+	Thumbnail   string `json:"thumbnail"`
+	Description string `json:"description"`
+}
+
 // FeedReponse ...
 type FeedReponse struct {
 	Status string `json:"status"`
 	Feed   Feed   `json:"feed"`
 	Items  []Item `json:"items"`
+}
+
+// MiniFeedReponse ...
+type MiniFeedReponse struct {
+	Items []MiniItem `json:"items"`
 }
 
 func getFeeds(body []byte) (*FeedReponse, error) {
@@ -50,6 +79,21 @@ func getFeeds(body []byte) (*FeedReponse, error) {
 	return f, err
 }
 
+func minimizeItems(items []Item) []MiniItem {
+	var miniItems []MiniItem
+	for _, v := range items {
+		miniItems = append(miniItems, MiniItem{
+			Title:       v.Title,
+			PubDate:     v.PubDate,
+			GUID:        v.GUID,
+			Thumbnail:   v.Thumbnail,
+			Description: v.Description,
+		})
+	}
+
+	return miniItems
+}
+
 func resolveMediumURL(url string) string {
 	urlParts := strings.Split(url, "/")
 	mediumChannel := urlParts[3]
@@ -57,22 +101,14 @@ func resolveMediumURL(url string) string {
 	return "https://medium.com/feed/" + mediumChannel
 }
 
-// GetPostsByURLHandler ...
-func GetPostsByURLHandler(w http.ResponseWriter, r *http.Request) {
-	res := lib.Response{ResponseWriter: w}
-	url := r.URL.Query().Get("url")
-
-	if len(url) == 0 {
-		res.SendNotFound()
-		return
-	}
-
+func getFeedFromURL(url string) *FeedReponse {
 	if strings.Contains(url, "https://medium.com/") {
 		url = resolveMediumURL(url)
 	} else {
 		url = url + "/feed"
 	}
 
+	// Get and parse API
 	apiKey := os.Getenv("API_KEY")
 	resp, err := http.Get("http://api.rss2json.com/v1/api.json?rss_url=" + url + "&api_key=" + apiKey + "&count=10&order_by=pubDate")
 	if err != nil {
@@ -84,12 +120,118 @@ func GetPostsByURLHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	f, err := getFeeds([]byte(body))
+	feed, err := getFeeds([]byte(body))
 
-	if f.Status != "ok" || len(f.Items) == 0 {
+	return feed
+}
+
+func findArticleByID(name string, items []Item, id string) int {
+	for index, v := range items {
+		switch name {
+		case "medium":
+			if v.GUID == "https://medium.com/p/"+id {
+				return index
+			}
+		case "codedao":
+			if v.GUID == "http://toidicodedao.com/?p="+id {
+				return index
+			}
+		case "fpt":
+			if v.GUID == "https://daihoc.fpt.edu.vn/?p="+id+"/" {
+				return index
+			}
+		default:
+			if v.GUID == id {
+				return index
+			}
+		}
+	}
+
+	return -1
+}
+
+func getDataFromURLs(urlArr []string) []Item {
+	var itemCrawl []Item
+	for index := range urlArr {
+		crawl := getFeedFromURL(urlArr[index])
+		itemCrawl = append(itemCrawl, crawl.Items...)
+	}
+
+	return itemCrawl
+}
+
+func getDataFromSite(name string) []Item {
+	// Reference to system cache
+	c := cache.GetCache()
+	defaultExpiration := cache.GetDefaultExpiration()
+
+	var urls []string
+	switch name {
+	case "medium":
+		urls = MediumURLs
+	case "codedao":
+		urls = CodeDaoURLS
+	case "fpt":
+		urls = FPTURLs
+	default:
+		urls = MediumURLs
+	}
+
+	// Check cache and use data from cache
+	var articles []Item
+	articleGot, found := c.Get(name)
+	if found {
+		articles, _ = articleGot.([]Item)
+	} else {
+		articlesCache := getDataFromURLs(urls)
+		c.Set(name, articlesCache, defaultExpiration)
+		articles = articlesCache
+	}
+
+	return articles
+}
+
+// GetHomeFeedHandler ...
+func GetHomeFeedHandler(w http.ResponseWriter, r *http.Request) {
+	res := lib.Response{ResponseWriter: w}
+	vars := mux.Vars(r)
+	name := vars["name"]
+
+	if len(name) == 0 {
+		res.SendNotFound()
+		return
+	}
+
+	articles := getDataFromSite(name)
+
+	if len(articles) == 0 {
 		res.SendBadRequest("Cannot crawl this page")
 		return
 	}
 
-	res.SendOK(f)
+	res.SendOK(minimizeItems(articles))
+}
+
+// GetPostFeedHandler ...
+func GetPostFeedHandler(w http.ResponseWriter, r *http.Request) {
+	res := lib.Response{ResponseWriter: w}
+	vars := mux.Vars(r)
+	name := vars["name"]
+	id := vars["id"]
+
+	if len(name) == 0 || len(id) == 0 {
+		res.SendNotFound()
+		return
+	}
+
+	articles := getDataFromSite(name)
+
+	index := findArticleByID(name, articles, id)
+
+	if index == -1 {
+		res.SendBadRequest("Cannot found that post")
+		return
+	}
+
+	res.SendOK(articles[index])
 }

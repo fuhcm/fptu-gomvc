@@ -197,7 +197,7 @@ func (c *Confession) SearchConfession(keyword string) []Confession {
 	db := config.GetDatabaseConnection()
 
 	var confessions []Confession
-	db.Order("id desc").Limit(10).Where("status = 1 AND content LIKE?", "%"+keyword+"%").Find(&confessions)
+	db.Order("id desc").Limit(50).Where("status = 1 AND content LIKE?", "%"+keyword+"%").Find(&confessions)
 
 	return confessions
 }

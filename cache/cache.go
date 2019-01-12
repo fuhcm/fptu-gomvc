@@ -7,7 +7,7 @@ import (
 )
 
 // Create a cache
-var c = cache.New(5*time.Minute, 10*time.Minute)
+var c = cache.New(30*time.Minute, 60*time.Minute)
 
 // GetCache ...
 func GetCache() *cache.Cache {

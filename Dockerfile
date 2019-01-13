@@ -5,6 +5,7 @@ RUN apk update && apk add --no-cache git
 COPY . $GOPATH/src/github.com/gosu-team/fptu-api/
 WORKDIR $GOPATH/src/github.com/gosu-team/fptu-api/
 
+RUN touch .env
 RUN go get -v -d ./cmd/app/
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/app/main.go

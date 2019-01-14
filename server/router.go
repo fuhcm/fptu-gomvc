@@ -74,5 +74,8 @@ func NewRouter() *mux.Router {
 	mainRouter.Methods("GET").Path("/crawl/{name}").HandlerFunc(controllers.GetHomeFeedHandler)
 	mainRouter.Methods("GET").Path("/crawl/{name}/{id}").HandlerFunc(controllers.GetPostFeedHandler)
 
+	// Push
+	mainRouter.Methods("POST").Path(apiPrefix + "/push/sync").HandlerFunc(controllers.SyncPushIDHandler)
+
 	return mainRouter
 }

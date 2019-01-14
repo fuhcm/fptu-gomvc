@@ -16,6 +16,7 @@ type Confession struct {
 
 	Content  string `json:"content" gorm:"not null; type:text;"`
 	Sender   string `json:"sender" gorm:"not null; type:varchar(250);"`
+	PushID   string `json:"push_id" gorm:"not null; type:varchar(250);"`
 	Status   int    `json:"status" gorm:"not null; type:int(11);"`
 	Approver int    `json:"approver" gorm:"type:int(11);"`
 	Reason   string `json:"reason" gorm:"type:varchar(250);"`
@@ -173,6 +174,10 @@ func (c *Confession) setConfessionRejected(status int, approver int, reason stri
 	c.Reason = reason
 }
 
+func (c *Confession) setPushID(pushID string) {
+	c.PushID = pushID
+}
+
 // RejectConfession ...
 func (c *Confession) RejectConfession(approverID int, reason string) error {
 	if err := c.FetchByID(); err != nil {
@@ -200,4 +205,11 @@ func (c *Confession) SearchConfession(keyword string) []Confession {
 	db.Order("id desc").Limit(50).Where("status = 1 AND content LIKE?", "%"+keyword+"%").Find(&confessions)
 
 	return confessions
+}
+
+// SyncPushID ...
+func (c *Confession) SyncPushID(sender string, pushID string) {
+	db := config.GetDatabaseConnection()
+
+	db.Model(&c).Where("sender = ?", sender).Update("push_id", pushID)
 }

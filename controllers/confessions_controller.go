@@ -282,3 +282,23 @@ func SearchConfessionsHandler(w http.ResponseWriter, r *http.Request) {
 	collection := confessionsResponseResolve(confessions)
 	res.SendOK(collection)
 }
+
+// SyncPushIDRequest ...
+type SyncPushIDRequest struct {
+	Sender string `json:"sender"`
+	PushID string `json:"push_id"`
+}
+
+// SyncPushIDHandler ...
+func SyncPushIDHandler(w http.ResponseWriter, r *http.Request) {
+	req := lib.Request{ResponseWriter: w, Request: r}
+	res := lib.Response{ResponseWriter: w}
+
+	jsonRequest := new(SyncPushIDRequest)
+	req.GetJSONBody(jsonRequest)
+
+	confession := new(models.Confession)
+	confession.SyncPushID(jsonRequest.Sender, jsonRequest.PushID)
+
+	res.SendNoContent()
+}

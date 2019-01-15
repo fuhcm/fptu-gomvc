@@ -48,6 +48,7 @@ type confessionElement struct {
 	Approver  string     `json:"approver"`
 	Reason    string     `json:"reason"`
 	CfsID     int        `json:"cfs_id"`
+	PushID    string     `json:"push_id"`
 }
 
 type confessionCollection []confessionElement
@@ -59,7 +60,7 @@ func confessionsResponseResolve(arr []models.Confession) confessionCollection {
 		user := new(models.User)
 		approverNickname := user.FetchNicknameByID(e.Approver)
 
-		e := confessionElement{e.ID, e.CreatedAt, e.UpdatedAt, e.Content, e.Status, approverNickname, e.Reason, e.CfsID}
+		e := confessionElement{e.ID, e.CreatedAt, e.UpdatedAt, e.Content, e.Status, approverNickname, e.Reason, e.CfsID, e.PushID}
 		collection = append(collection, e)
 	}
 

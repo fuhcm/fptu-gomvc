@@ -128,6 +128,7 @@ type newConfessionRequest struct {
 	Content string `json:"content"`
 	Sender  string `json:"sender"`
 	Captcha string `json:"captcha"`
+	PushID  string `json:"pushid"`
 }
 
 // CreateConfessionHandler ...
@@ -157,6 +158,7 @@ func CreateConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	confession := models.Confession{
 		Content: newConfession.Content,
 		Sender:  newConfession.Sender,
+		PushID:  newConfession.PushID,
 	}
 
 	if err := confession.Create(); err != nil {

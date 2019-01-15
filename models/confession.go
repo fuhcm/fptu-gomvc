@@ -16,7 +16,7 @@ type Confession struct {
 
 	Content  string `json:"content" gorm:"not null; type:text;"`
 	Sender   string `json:"sender" gorm:"not null; type:varchar(250);"`
-	PushID   string `json:"push_id" gorm:"not null; type:varchar(250);"`
+	PushID   string `json:"push_id" gorm:"type:varchar(250);"`
 	Status   int    `json:"status" gorm:"not null; type:int(11);"`
 	Approver int    `json:"approver" gorm:"type:int(11);"`
 	Reason   string `json:"reason" gorm:"type:varchar(250);"`

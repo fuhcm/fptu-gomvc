@@ -195,7 +195,9 @@ func getDataFromSite(name string) []Item {
 		articles, _ = articleGot.([]Item)
 	} else {
 		articlesCache := getDataFromURLs(urls)
-		c.Set(name, articlesCache, defaultExpiration)
+		if len(articlesCache) > 0 {
+			c.Set(name, articlesCache, defaultExpiration)
+		}
 		articles = articlesCache
 	}
 

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/gorilla/mux"
 	"github.com/gosu-team/fptu-api/config"
@@ -152,11 +153,20 @@ func findArticleByID(name string, items []Item, id string) int {
 }
 
 func getDataFromURLs(urlArr []string) []Item {
+	var wg sync.WaitGroup
 	var itemCrawl []Item
+
+	wg.Add(len(urlArr))
+
 	for index := range urlArr {
-		crawl := getFeedFromURL(urlArr[index])
-		itemCrawl = append(itemCrawl, crawl.Items...)
+		go func(index int) {
+			defer wg.Done()
+			crawl := getFeedFromURL(urlArr[index])
+			itemCrawl = append(itemCrawl, crawl.Items...)
+		}(index)
 	}
+
+	wg.Wait()
 
 	return itemCrawl
 }

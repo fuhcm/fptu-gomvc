@@ -19,7 +19,7 @@ var MediumURLs = []string{"https://codeburst.io",
 	"https://medium.freecodecamp.org",
 	"https://hackernoon.com",
 	"https://medium.com/javascript-scene",
-	"https://medium.com/dev-channel",
+	"https://blog.logrocket.com/",
 	"https://medium.com/google-cloud"}
 
 // FPTURLs ...

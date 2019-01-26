@@ -248,3 +248,21 @@ func GetPostFeedHandler(w http.ResponseWriter, r *http.Request) {
 
 	res.SendOK(articles[index])
 }
+
+// GetResolveGithubGist ...
+func GetResolveGithubGist(w http.ResponseWriter, r *http.Request) {
+	res := lib.Response{ResponseWriter: w}
+	url := r.URL.Query().Get("url")
+
+	fmt.Println("URL: ", url)
+
+	resp, err := http.Get(url)
+
+	if err != nil {
+		panic(err.Error())
+	}
+
+	gistURL := resp.Request.URL.Scheme + "://" + resp.Request.URL.Host + resp.Request.URL.Path
+
+	res.SendOK(gistURL)
+}

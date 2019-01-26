@@ -77,5 +77,8 @@ func NewRouter() *mux.Router {
 	// Push
 	mainRouter.Methods("POST").Path(apiPrefix + "/push/sync").HandlerFunc(controllers.SyncPushIDHandler)
 
+	// Github Gist
+	mainRouter.Methods("GET").Path("/gist").HandlerFunc(controllers.GetResolveGithubGist)
+
 	return mainRouter
 }

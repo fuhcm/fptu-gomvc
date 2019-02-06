@@ -254,8 +254,6 @@ func GetResolveGithubGist(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
 	url := r.URL.Query().Get("url")
 
-	fmt.Println("URL: ", url)
-
 	resp, err := http.Get(url)
 
 	if err != nil {

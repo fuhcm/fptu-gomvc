@@ -41,8 +41,8 @@ func getUserIDFromHeader(r *http.Request) int {
 
 type confessionElement struct {
 	ID        int        `json:"id"`
-	CreatedAt *time.Time `json:"created_at, omitempty"`
-	UpdatedAt *time.Time `json:"updated_at, omitempty"`
+	CreatedAt *time.Time `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
 	Content   string     `json:"content"`
 	Status    int        `json:"status"`
 	Approver  string     `json:"approver"`
@@ -227,8 +227,8 @@ func RollbackApproveConfessionHandler(w http.ResponseWriter, r *http.Request) {
 
 // RejectConfessionRequest ...
 type RejectConfessionRequest struct {
-	ID     int    `json: "id"`
-	Reason string `json: "reason"`
+	ID     int    `json:"id"`
+	Reason string `json:"reason"`
 }
 
 // RejectConfessionHandler ...

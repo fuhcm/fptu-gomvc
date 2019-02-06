@@ -45,8 +45,6 @@ func (r *Response) SendNotImplemented() {
 	http.Error(r.ResponseWriter, "Not Implemented", http.StatusNotImplemented)
 }
 
-////////////////////////////////
-
 func setHTTPStatus(w http.ResponseWriter, status int) {
 	w.WriteHeader(status)
 }

@@ -99,10 +99,11 @@ func minimizeItems(items []Item) []MiniItem {
 
 func resolveMediumURL(url string) string {
 	urlParts := strings.Split(url, "/")
+	string mediumChannel
 	if strings.Contains(url, "tag") {
-		mediumChannel := urlParts[4]
+		mediumChannel = urlParts[4]
 	} else {
-		mediumChannel := urlParts[3]
+		mediumChannel = urlParts[3]
 	}
 
 	return "https://medium.com/feed/" + mediumChannel

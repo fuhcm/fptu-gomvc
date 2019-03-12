@@ -18,10 +18,11 @@ import (
 var MediumURLs = []string{"https://codeburst.io",
 	"https://medium.freecodecamp.org",
 	"https://hackernoon.com",
-	"https://medium.com/javascript-scene",
 	"https://blog.logrocket.com/",
 	"https://medium.com/tag/react",
-	"https://medium.com/tag/golang"}
+	"https://medium.com/tag/golang",
+	"https://medium.com/tag/nodejs",
+	"https://medium.com/tag/docker"}
 
 // FPTURLs ...
 var FPTURLs = []string{"https://daihoc.fpt.edu.vn"}

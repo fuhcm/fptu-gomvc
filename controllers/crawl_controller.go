@@ -100,14 +100,11 @@ func minimizeItems(items []Item) []MiniItem {
 
 func resolveMediumURL(url string) string {
 	urlParts := strings.Split(url, "/")
-	var mediumChannel string
 	if strings.Contains(url, "tag") {
-		mediumChannel = urlParts[4]
-	} else {
-		mediumChannel = urlParts[3]
+		return "https://medium.com/feed/tag/" + urlParts[4]
 	}
 
-	return "https://medium.com/feed/" + mediumChannel
+	return "https://medium.com/feed/" + urlParts[3]
 }
 
 func getFeedFromURL(url string) *FeedReponse {

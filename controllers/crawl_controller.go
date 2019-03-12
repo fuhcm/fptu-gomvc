@@ -20,7 +20,8 @@ var MediumURLs = []string{"https://codeburst.io",
 	"https://hackernoon.com",
 	"https://medium.com/javascript-scene",
 	"https://blog.logrocket.com/",
-	"https://medium.com/google-cloud"}
+	"https://medium.com/tag/react",
+	"https://medium.com/tag/golang"}
 
 // FPTURLs ...
 var FPTURLs = []string{"https://daihoc.fpt.edu.vn"}
@@ -98,7 +99,11 @@ func minimizeItems(items []Item) []MiniItem {
 
 func resolveMediumURL(url string) string {
 	urlParts := strings.Split(url, "/")
-	mediumChannel := urlParts[3]
+	if strings.Contains(url, "tag") {
+		mediumChannel := urlParts[4]
+	} else {
+		mediumChannel := urlParts[3]
+	}
 
 	return "https://medium.com/feed/" + mediumChannel
 }

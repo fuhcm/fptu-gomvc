@@ -99,7 +99,7 @@ func minimizeItems(items []Item) []MiniItem {
 
 func resolveMediumURL(url string) string {
 	urlParts := strings.Split(url, "/")
-	string mediumChannel
+	var string mediumChannel
 	if strings.Contains(url, "tag") {
 		mediumChannel = urlParts[4]
 	} else {

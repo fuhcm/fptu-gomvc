@@ -10,14 +10,14 @@ import (
 // User ...
 type User struct {
 	ID        int        `json:"id" gorm:"primary_key"`
-	CreatedAt *time.Time `json:"created_at, omitempty"`
-	UpdatedAt *time.Time `json:"updated_at, omitempty"`
-	DeletedAt *time.Time `json:"deleted_at, omitempty" sql:"index"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty" sql:"index"`
 
 	Email    string `json:"email" gorm:"not null; type:varchar(250); unique_index"`
 	Password string `json:"password" gorm:"not null; type:varchar(250)"`
-	Admin    string `json:"admin" gorm: "not null; type:boolean"`
-	Nickname string `json:"nickname" gorm: "type: varchar(250);"`
+	Admin    string `json:"admin" gorm:"not null;type:boolean"`
+	Nickname string `json:"nickname" gorm:"type:varchar(250);"`
 }
 
 // TableName set User's table name to be `users`

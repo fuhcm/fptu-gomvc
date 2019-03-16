@@ -10,9 +10,9 @@ import (
 // Confession ...
 type Confession struct {
 	ID        int        `json:"id" gorm:"primary_key"`
-	CreatedAt *time.Time `json:"created_at, omitempty"`
-	UpdatedAt *time.Time `json:"updated_at, omitempty"`
-	DeletedAt *time.Time `json:"deleted_at, omitempty" sql:"index"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty" sql:"index"`
 
 	Content  string `json:"content" gorm:"not null; type:text;"`
 	Sender   string `json:"sender" gorm:"not null; type:varchar(250);"`

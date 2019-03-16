@@ -147,35 +147,10 @@ func (c *Confession) ApproveConfession(approverID int) error {
 	return nil
 }
 
-func (c *Confession) setConfessionUnapproved() {
-	c.Status = 0
-	c.Approver = 0
-	c.CfsID = 0
-}
-
-// RollbackApproveConfession ...
-func (c *Confession) RollbackApproveConfession(approverID int) error {
-	if err := c.FetchByID(); err != nil {
-		return errors.New("Could not find the confession")
-	}
-
-	c.setConfessionUnapproved()
-
-	if err := c.Save(); err != nil {
-		return errors.New("Unable to rollback approved confession`")
-	}
-
-	return nil
-}
-
 func (c *Confession) setConfessionRejected(status int, approver int, reason string) {
 	c.Status = status
 	c.Approver = approver
 	c.Reason = reason
-}
-
-func (c *Confession) setPushID(pushID string) {
-	c.PushID = pushID
 }
 
 // RejectConfession ...

@@ -208,23 +208,6 @@ func ApproveConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	res.SendOK(approveConfession)
 }
 
-// RollbackApproveConfessionHandler ...
-func RollbackApproveConfessionHandler(w http.ResponseWriter, r *http.Request) {
-	req := lib.Request{ResponseWriter: w, Request: r}
-	res := lib.Response{ResponseWriter: w}
-
-	approverID := getUserIDFromHeader(r)
-	approveConfession := new(models.Confession)
-	req.GetJSONBody(approveConfession)
-
-	if err := approveConfession.RollbackApproveConfession(approverID); err != nil {
-		res.SendBadRequest(err.Error())
-		return
-	}
-
-	res.SendOK(approveConfession)
-}
-
 // RejectConfessionRequest ...
 type RejectConfessionRequest struct {
 	ID     int    `json:"id"`
@@ -250,24 +233,6 @@ func RejectConfessionHandler(w http.ResponseWriter, r *http.Request) {
 	res.SendOK(rejectConfession)
 }
 
-// NextConfession ...
-type NextConfession struct {
-	ID int `json:"id"`
-}
-
-// GetNextConfessionNextIDHandler ...
-func GetNextConfessionNextIDHandler(w http.ResponseWriter, r *http.Request) {
-	res := lib.Response{ResponseWriter: w}
-
-	confession := new(models.Confession)
-	nextID := confession.GetNextConfessionID()
-	nextConfession := NextConfession{
-		ID: nextID,
-	}
-
-	res.SendOK(nextConfession)
-}
-
 // SearchConfessionsHandler ...
 func SearchConfessionsHandler(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
@@ -275,6 +240,7 @@ func SearchConfessionsHandler(w http.ResponseWriter, r *http.Request) {
 	// Number of element to query
 	keyword := r.URL.Query().Get("q")
 	keyword = strings.TrimSpace(keyword)
+
 	if keyword == "" {
 		res.SendBadRequest("Nothing to search!")
 		return

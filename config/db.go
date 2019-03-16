@@ -11,7 +11,7 @@ import (
 var gormConn *gorm.DB
 
 // InitDB ...
-func InitDB(){
+func InitDB() {
 	if gormConn != nil && gormConn.DB() != nil && gormConn.DB().Ping() == nil {
 		return
 	}
@@ -21,6 +21,10 @@ func InitDB(){
 	if err != nil {
 		logrus.Fatal("Could not connect to the database")
 	}
+
+	// Setting connection pool
+	conn.DB().SetMaxIdleConns(100)
+	conn.DB().SetMaxOpenConns(10000)
 
 	// Store the connection in package variable for furher request
 	gormConn = conn

@@ -91,14 +91,35 @@ func (c *Confession) FetchBySender(sender string, numLoad int) []Confession {
 	return confessions
 }
 
+type overviewSpec struct {
+	Total   int
+	Pending int
+	Reject  int
+}
+
 // FetchOverview ...
 func (c *Confession) FetchOverview() (int, int, int) {
-	db := config.GetDatabaseConnection()
+	// Reference to system cache
+	cache := config.GetCache()
+	defaultExpiration := config.GetDefaultExpiration()
 
+	// Check from cache
+	overviewCached, found := cache.Get("overview")
+	if found {
+		overview, _ := overviewCached.(overviewSpec)
+		return overview.Total, overview.Pending, overview.Reject
+	}
+
+	db := config.GetDatabaseConnection()
 	totalCount, pendingCount, rejectedCount := 0, 0, 0
+
 	db.Model(&Confession{}).Count(&totalCount)
 	db.Model(&Confession{}).Where("status = ?", 0).Count(&pendingCount)
 	db.Model(&Confession{}).Where("status = ?", 2).Count(&rejectedCount)
+
+	// Load data to cache
+	overviewObj := overviewSpec{Total: totalCount, Pending: pendingCount, Reject: rejectedCount}
+	cache.Set("overview", overviewObj, defaultExpiration)
 
 	return totalCount, pendingCount, rejectedCount
 }

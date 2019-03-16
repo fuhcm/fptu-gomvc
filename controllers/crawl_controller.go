@@ -177,7 +177,7 @@ func getDataFromURLs(urlArr []string) []Item {
 
 func getDataFromSite(name string) []Item {
 	// Reference to system cache
-	c := config.GetCache()
+	cache := config.GetCache()
 	defaultExpiration := config.GetDefaultExpiration()
 
 	var urls []string
@@ -194,13 +194,13 @@ func getDataFromSite(name string) []Item {
 
 	// Check cache and use data from cache
 	var articles []Item
-	articleGot, found := c.Get(name)
+	articleGot, found := cache.Get(name)
 	if found {
 		articles, _ = articleGot.([]Item)
 	} else {
 		articlesCache := getDataFromURLs(urls)
 		if len(articlesCache) > 0 {
-			c.Set(name, articlesCache, defaultExpiration)
+			cache.Set(name, articlesCache, defaultExpiration)
 		}
 		articles = articlesCache
 	}

@@ -23,16 +23,16 @@ func privateRoute(controller http.HandlerFunc) http.Handler {
 func NewRouter() *mux.Router {
 
 	// Create main router
-	mainRouter := mux.NewRouter().StrictSlash(true)
-	mainRouter.KeepContext = true
+	router := mux.NewRouter().StrictSlash(true)
+	router.KeepContext = true
 
 	// Handle 404
-	mainRouter.NotFoundHandler = http.HandlerFunc(notFound)
+	router.NotFoundHandler = http.HandlerFunc(notFound)
 
 	/**
 	 * meta-data
 	 */
-	mainRouter.Methods("GET").Path("/api/info").HandlerFunc(controllers.GetAPIInfo)
+	router.Methods("GET").Path("/api/info").HandlerFunc(controllers.GetAPIInfo)
 
 	// API Version
 	apiPath := "/api"
@@ -40,36 +40,36 @@ func NewRouter() *mux.Router {
 	apiPrefix := apiPath + apiVersion
 
 	// Auth routes
-	mainRouter.Methods("POST").Path("/auth/login").HandlerFunc(controllers.LoginHandler)
-	mainRouter.Methods("POST").Path("/auth/login_facebook").HandlerFunc(controllers.LoginHandlerWithoutPassword)
+	router.Methods("POST").Path("/auth/login").HandlerFunc(controllers.LoginHandler)
+	router.Methods("POST").Path("/auth/login_facebook").HandlerFunc(controllers.LoginHandlerWithoutPassword)
 
 	// User routes
-	mainRouter.Methods("GET").Path(apiPrefix + "/users").Handler(privateRoute(controllers.GetAllUsersHandler))
-	// mainRouter.Methods("POST").Path(apiPrefix + "/users").Handler(privateRoute(controllers.CreateUserHandler))
-	// mainRouter.Methods("POST").Path(apiPrefix + "/users").HandlerFunc(controllers.CreateUserHandler)
-	mainRouter.Methods("GET").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.GetUserByIDHandler))
-	mainRouter.Methods("PUT").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.UpdateUserHandler))
-	mainRouter.Methods("DELETE").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.DeleteUserHandler))
+	router.Methods("GET").Path(apiPrefix + "/users").Handler(privateRoute(controllers.GetAllUsersHandler))
+	// router.Methods("POST").Path(apiPrefix + "/users").Handler(privateRoute(controllers.CreateUserHandler))
+	// router.Methods("POST").Path(apiPrefix + "/users").HandlerFunc(controllers.CreateUserHandler)
+	router.Methods("GET").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.GetUserByIDHandler))
+	router.Methods("PUT").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.UpdateUserHandler))
+	router.Methods("DELETE").Path(apiPrefix + "/users/{id}").Handler(privateRoute(controllers.DeleteUserHandler))
 
 	// Confession routes
-	mainRouter.Methods("GET").Path(apiPrefix + "/admincp/confessions").Handler(privateRoute(controllers.GetAllConfessionsHandler))
-	mainRouter.Methods("POST").Path(apiPrefix + "/confessions").HandlerFunc(controllers.CreateConfessionHandler)
-	mainRouter.Methods("POST").Path(apiPrefix + "/myconfess").HandlerFunc(controllers.GetConfessionsBySenderHandler)
-	mainRouter.Methods("GET").Path(apiPrefix + "/confessions/approved").HandlerFunc(controllers.GetApprovedConfessionsHandler)
-	mainRouter.Methods("GET").Path(apiPrefix + "/confessions/overview").HandlerFunc(controllers.GetConfessionsOverviewHandler)
-	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(privateRoute(controllers.ApproveConfessionHandler))
-	mainRouter.Methods("PUT").Path(apiPrefix + "/admincp/confessions/reject").Handler(privateRoute(controllers.RejectConfessionHandler))
-	mainRouter.Methods("GET").Path(apiPrefix + "/confessions/search").HandlerFunc(controllers.SearchConfessionsHandler)
+	router.Methods("GET").Path(apiPrefix + "/admincp/confessions").Handler(privateRoute(controllers.GetAllConfessionsHandler))
+	router.Methods("POST").Path(apiPrefix + "/confessions").HandlerFunc(controllers.CreateConfessionHandler)
+	router.Methods("POST").Path(apiPrefix + "/myconfess").HandlerFunc(controllers.GetConfessionsBySenderHandler)
+	router.Methods("GET").Path(apiPrefix + "/confessions/approved").HandlerFunc(controllers.GetApprovedConfessionsHandler)
+	router.Methods("GET").Path(apiPrefix + "/confessions/overview").HandlerFunc(controllers.GetConfessionsOverviewHandler)
+	router.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(privateRoute(controllers.ApproveConfessionHandler))
+	router.Methods("PUT").Path(apiPrefix + "/admincp/confessions/reject").Handler(privateRoute(controllers.RejectConfessionHandler))
+	router.Methods("GET").Path(apiPrefix + "/confessions/search").HandlerFunc(controllers.SearchConfessionsHandler)
 
 	// Crawl
-	mainRouter.Methods("GET").Path("/crawl/{name}").HandlerFunc(controllers.GetHomeFeedHandler)
-	mainRouter.Methods("GET").Path("/crawl/{name}/{id}").HandlerFunc(controllers.GetPostFeedHandler)
+	router.Methods("GET").Path("/crawl/{name}").HandlerFunc(controllers.GetHomeFeedHandler)
+	router.Methods("GET").Path("/crawl/{name}/{id}").HandlerFunc(controllers.GetPostFeedHandler)
 
 	// Push
-	mainRouter.Methods("POST").Path(apiPrefix + "/push/sync").HandlerFunc(controllers.SyncPushIDHandler)
+	router.Methods("POST").Path(apiPrefix + "/push/sync").HandlerFunc(controllers.SyncPushIDHandler)
 
 	// Github Gist
-	mainRouter.Methods("GET").Path("/gist").HandlerFunc(controllers.GetResolveGithubGist)
+	router.Methods("GET").Path("/gist").HandlerFunc(controllers.GetResolveGithubGist)
 
-	return mainRouter
+	return router
 }

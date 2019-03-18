@@ -3,9 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/gosu-team/fptu-api/config"
-	"github.com/gosu-team/fptu-api/lib"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -13,6 +10,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/gorilla/mux"
+	"github.com/gosu-team/fptu-api/config"
+	"github.com/gosu-team/fptu-api/lib"
 )
 
 // MediumURLs ...

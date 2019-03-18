@@ -179,7 +179,7 @@ func getDataFromURLs(urlArr []string) []Item {
 		t1, _ := time.Parse(layout, itemCrawl[i].PubDate)
 		t2, _ := time.Parse(layout, itemCrawl[j].PubDate)
 
-		return t1.Before(t2)
+		return t1.After(t2)
 	})
 
 	return itemCrawl

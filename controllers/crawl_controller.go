@@ -3,15 +3,16 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"os"
-	"strings"
-	"sync"
-
 	"github.com/gorilla/mux"
 	"github.com/gosu-team/fptu-api/config"
 	"github.com/gosu-team/fptu-api/lib"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"sort"
+	"strings"
+	"sync"
+	"time"
 )
 
 // MediumURLs ...
@@ -172,6 +173,14 @@ func getDataFromURLs(urlArr []string) []Item {
 
 	wg.Wait()
 
+	sort.Slice(itemCrawl, func(i, j int) bool {
+		layout := "2006-01-02 15:04:05"
+		t1, _ := time.Parse(layout, itemCrawl[i].PubDate)
+		t2, _ := time.Parse(layout, itemCrawl[j].PubDate)
+
+		return t1.Before(t2)
+	})
+
 	return itemCrawl
 }
 
@@ -194,16 +203,22 @@ func getDataFromSite(name string) []Item {
 
 	// Check cache and use data from cache
 	var articles []Item
-	articleGot, found := cache.Get(name)
-	if found {
-		articles, _ = articleGot.([]Item)
-	} else {
-		articlesCache := getDataFromURLs(urls)
-		if len(articlesCache) > 0 {
-			cache.Set(name, articlesCache, defaultExpiration)
-		}
-		articles = articlesCache
+	// articleGot, found := cache.Get(name)
+	// if found {
+	// 	articles, _ = articleGot.([]Item)
+	// } else {
+	// 	articlesCache := getDataFromURLs(urls)
+	// 	if len(articlesCache) > 0 {
+	// 		cache.Set(name, articlesCache, defaultExpiration)
+	// 	}
+	// 	articles = articlesCache
+	// }
+
+	articlesCache := getDataFromURLs(urls)
+	if len(articlesCache) > 0 {
+		cache.Set(name, articlesCache, defaultExpiration)
 	}
+	articles = articlesCache
 
 	return articles
 }

@@ -204,22 +204,16 @@ func getDataFromSite(name string) []Item {
 
 	// Check cache and use data from cache
 	var articles []Item
-	// articleGot, found := cache.Get(name)
-	// if found {
-	// 	articles, _ = articleGot.([]Item)
-	// } else {
-	// 	articlesCache := getDataFromURLs(urls)
-	// 	if len(articlesCache) > 0 {
-	// 		cache.Set(name, articlesCache, defaultExpiration)
-	// 	}
-	// 	articles = articlesCache
-	// }
-
-	articlesCache := getDataFromURLs(urls)
-	if len(articlesCache) > 0 {
-		cache.Set(name, articlesCache, defaultExpiration)
+	articleGot, found := cache.Get(name)
+	if found {
+		articles, _ = articleGot.([]Item)
+	} else {
+		articlesCache := getDataFromURLs(urls)
+		if len(articlesCache) > 0 {
+			cache.Set(name, articlesCache, defaultExpiration)
+		}
+		articles = articlesCache
 	}
-	articles = articlesCache
 
 	return articles
 }

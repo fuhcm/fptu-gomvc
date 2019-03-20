@@ -113,13 +113,13 @@ func GetApprovedConfessionsHandler(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
 
 	// Number of element to query
-	numLoad, err := strconv.Atoi(r.URL.Query().Get("load"))
+	latestID, err := strconv.Atoi(r.URL.Query().Get("latest_id"))
 	if err != nil {
-		numLoad = 10
+		latestID = 0
 	}
 
 	confession := new(models.Confession)
-	confessions := confession.FetchApprovedConfession(numLoad)
+	confessions := confession.FetchApprovedConfession(latestID)
 	collection := confessionsResponseResolve(confessions)
 	res.SendOK(collection)
 }

@@ -125,11 +125,15 @@ func (c *Confession) FetchOverview() (int, int, int) {
 }
 
 // FetchApprovedConfession ...
-func (c *Confession) FetchApprovedConfession(numLoad int) []Confession {
+func (c *Confession) FetchApprovedConfession(lastestID int) []Confession {
 	db := config.GetDatabaseConnection()
 
 	var confessions []Confession
-	db.Order("id desc").Limit(numLoad).Where("status = 1").Find(&confessions)
+	if lastestID == 0 {
+		db.Where("status = 1").Order("id desc").Limit(10).Find(&confessions)
+	} else {
+		db.Where("id < ? and status = 1", lastestID).Order("id desc").Limit(10).Find(&confessions)
+	}
 
 	return confessions
 }

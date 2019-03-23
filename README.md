@@ -10,11 +10,7 @@ Assuming you have a working Go environment and GOPATH/bin is in your PATH.
 
 ## Dependencies
 
-Install all dependencies `godep`:
-
-```
-$ go get -v
-```
+No need to fetch dependencies, thanks to `govendor`.
 
 Generate & modify your own environment configuration file:
 

@@ -4,23 +4,22 @@ This repository is a skeleton for building production ready Golang REST API.
 
 In this repo, we used gorilla/mux.
 
-# Installation
+## Development
 
-Assuming you have a working Go environment and GOPATH/bin is in your PATH.
+Build develop image:
 
-## Dependencies
+`docker build -f dev.Dockerfile -t fptu-api-dev .`
 
-No need to fetch dependencies, thanks to `govendor`.
+Run production container:
 
-Generate & modify your own environment configuration file:
+`docker run -it -p 3000:3000 --env-file ./.env -v $(pwd):/go/src/github.com/gosu-team/fptu-api fptu-api-dev:latest`
 
-```
-$ mv .env.example .env
-$ vim .env
-```
+## Production
 
-Start server proxy to listen on port 3000 and send request to proxied app listening on port 8000:
+Build production image:
 
-```
-$ go run cmd/app/main.go
-```
+`docker build -t fptu-api .`
+
+Run production container:
+
+`docker run -d --name fptu-api -p 5001:3000 fptu-api:latest`

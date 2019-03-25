@@ -1,0 +1,15 @@
+version: "3"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./dev.Dockerfile
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    image: fptu-api-dev
+    container_name: fptu-api-dev
+    volumes:
+      - .:/root/src/app
+    tty: true

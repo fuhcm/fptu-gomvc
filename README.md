@@ -8,11 +8,11 @@ In this repo, we used gorilla/mux.
 
 Build develop image:
 
-`docker build -f dev.Dockerfile -t fptu-api-dev .`
+`docker-compose build`
 
 Run production container:
 
-`docker run -it -p 3000:3000 --env-file ./.env -v $(pwd):/go/src/github.com/gosu-team/fptu-api fptu-api-dev:latest`
+`docker-compose up`
 
 ## Production
 

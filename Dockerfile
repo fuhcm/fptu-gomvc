@@ -5,7 +5,7 @@ WORKDIR $GOPATH/src/github.com/gosu-team/fptu-api/
 
 RUN touch .env
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build cmd/app/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go
 
 FROM alpine
 

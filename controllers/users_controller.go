@@ -2,18 +2,48 @@ package controllers
 
 import (
 	"net/http"
+	"sort"
+	"time"
 
 	"github.com/gosu-team/fptu-api/lib"
 	"github.com/gosu-team/fptu-api/models"
 	"golang.org/x/crypto/bcrypt"
 )
 
+type UserResponse struct {
+	CreatedAt *time.Time `json:"created_at"`
+	UpdatedAt *time.Time `json:"updated_at"`
+	NickName string `json:"nickname"`
+	Resolved int `json:"resolved"`
+}
+
 // GetAllUsersHandler ...
 func GetAllUsersHandler(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
 	user := new(models.User)
 	users := user.FetchAll()
-	res.SendOK(users)
+
+	var listUsersResponse []UserResponse
+
+	for _, item := range users {
+		cf := new(models.Confession)
+		resolvedConfessionCount := cf.FetchUserResolvedConfessionCount(item.ID)
+
+		newUser := UserResponse{
+			CreatedAt: item.CreatedAt,
+			UpdatedAt: item.UpdatedAt,
+			NickName: item.Nickname,
+			Resolved: resolvedConfessionCount,
+		}
+
+		listUsersResponse = append(listUsersResponse, newUser)
+	}
+
+	sort.Slice(listUsersResponse, func(i, j int) bool {
+		return listUsersResponse[i].Resolved > listUsersResponse[j].Resolved
+	})
+
+	res.SendOK(listUsersResponse)
 }
 
 // Hash password

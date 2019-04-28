@@ -213,3 +213,13 @@ func (c *Confession) SyncPushID(sender string, pushID string) {
 
 	db.Model(&c).Where("sender = ?", sender).Update("push_id", pushID)
 }
+
+// FetchUserResolvedConfessionCount ...
+func (c *Confession) FetchUserResolvedConfessionCount(userID int) int {
+	db := config.GetDatabaseConnection()
+
+	count := 0
+	db.Model(&Confession{}).Where("approver = ?", userID).Count(&count)
+
+	return count
+}

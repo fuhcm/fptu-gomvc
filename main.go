@@ -18,7 +18,7 @@ func main() {
 	// Loads the env variables
 	err := godotenv.Load()
 	if err != nil {
-		logrus.Fatal("Error loading .env file")
+		logrus.Warning("Cannot load .env file!")
 	}
 	config.InitDB()
 

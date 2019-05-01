@@ -47,7 +47,7 @@ func main() {
 
 	// Server router on given port and attach the cors headers
 	server := app.NewServer()
-	log.Fatal(http.ListenAndServe(os.Getenv(":" + "PORT"), server))
+	log.Fatal(http.ListenAndServe(":" + os.Getenv("PORT"), server))
 }
 
 func migrateDatabase() {

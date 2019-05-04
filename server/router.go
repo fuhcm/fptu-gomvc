@@ -5,6 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 
+	"github.com/gosu-team/fptu-api/chatsocket"
 	"github.com/gosu-team/fptu-api/controllers"
 	"github.com/gosu-team/fptu-api/lib"
 	"github.com/gosu-team/fptu-api/middlewares"
@@ -17,6 +18,12 @@ func notFound(w http.ResponseWriter, r *http.Request) {
 
 func privateRoute(controller http.HandlerFunc) http.Handler {
 	return middlewares.JWTMiddleware().Handler(http.HandlerFunc(controller))
+}
+
+func handleSocket(w http.ResponseWriter, r *http.Request) {
+	hub := chatsocket.NewHub()
+	go hub.Run()
+	chatsocket.ServeWs(hub, w, r)
 }
 
 // NewRouter ...
@@ -71,6 +78,8 @@ func NewRouter() *mux.Router {
 
 	// Github Gist
 	router.Methods("GET").Path("/gist").HandlerFunc(controllers.GetResolveGithubGist)
+
+	router.Path("/ws").HandlerFunc(handleSocket)
 
 	return router
 }

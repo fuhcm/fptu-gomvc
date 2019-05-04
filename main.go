@@ -28,7 +28,7 @@ func main() {
 
 	// Prints the version and the address of our api to the console
 	logrus.Info("Version is ", os.Getenv("PORT"))
-	logrus.Info("Starting Server on http://localhost:", os.Getenv("API_PORT"))
+	logrus.Info("Starting Server on http://localhost:", os.Getenv("PORT"))
 
 	// Set log level
 	switch os.Getenv("LOG_LEVEL") {
@@ -47,7 +47,7 @@ func main() {
 
 	// Server router on given port and attach the cors headers
 	server := app.NewServer()
-	log.Fatal(http.ListenAndServe(":" + os.Getenv("PORT"), server))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), server))
 }
 
 func migrateDatabase() {

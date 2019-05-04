@@ -27,6 +27,12 @@
 			"revisionTime": "2019-02-28T18:12:03Z"
 		},
 		{
+			"checksumSHA1": "3ORLCzeT6ci2RkN0jo1bY6bmE8A=",
+			"path": "github.com/gorilla/websocket",
+			"revision": "80c2d40e9b91f2ef7a9c1a403aeec64d1b89a9a6",
+			"revisionTime": "2019-04-27T04:03:06Z"
+		},
+		{
 			"checksumSHA1": "BVLcEDQelqXp6x9u4mbrxE7rxKs=",
 			"path": "github.com/jinzhu/gorm",
 			"revision": "472c70caa40267cb89fd8facb07fe6454b578626",

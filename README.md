@@ -1,23 +1,23 @@
-# Go RESTful API for FPTU Tech Insider
+# Go REST API for FPTu.tech
 
 This repository is a skeleton for building production ready Golang REST API.
 
-In this repo, we used `gorilla/mux` with also pure Go.
+In this repo, we used `gorilla/mux` with almost pure Go.
 
 ## Development
 
 Run development container:
 
-`docker-compose up`
+`$ docker-compose up`
 
 ## Production
 
 Build production image:
 
-`docker build -t fptu-api .`
+`$ docker build -t fptu-api .`
 
 Run production container:
 
-`docker run -d --name fptu-api -p 5001:3000 fptu-api:latest`
+`$ docker run -d --name fptu-api -p 5001:3000 fptu-api:latest`
 
-You may found the example environment file at `.env.example`.
+You may found the example environment configuration file at `.env.example`.

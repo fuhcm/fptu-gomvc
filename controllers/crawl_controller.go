@@ -145,7 +145,7 @@ func findArticleByID(name string, items []Item, id string) int {
 				return index
 			}
 		case "fpt":
-			if v.GUID == "http://daihoc.fpt.edu.vn/?p="+id+"/" {
+			if v.GUID == "http://daihoc.fpt.edu.vn/?p="+id+"" {
 				return index
 			}
 		default:

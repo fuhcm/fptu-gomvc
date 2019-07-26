@@ -1,7 +1,7 @@
 FROM golang:alpine as builder
 
-COPY . $GOPATH/src/github.com/gosu-team/fptu-api/
-WORKDIR $GOPATH/src/github.com/gosu-team/fptu-api/
+COPY . $GOPATH/src/webserver/
+WORKDIR $GOPATH/src/webserver/
 
 EXPOSE 3000
 

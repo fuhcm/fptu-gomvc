@@ -5,10 +5,10 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/gosu-team/fptu-api/chatsocket"
-	"github.com/gosu-team/fptu-api/controllers"
-	"github.com/gosu-team/fptu-api/lib"
-	"github.com/gosu-team/fptu-api/middlewares"
+	"webserver/chatsocket"
+	"webserver/controllers"
+	"webserver/lib"
+	"webserver/middlewares"
 )
 
 func notFound(w http.ResponseWriter, r *http.Request) {

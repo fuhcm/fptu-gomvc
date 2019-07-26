@@ -12,8 +12,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/gosu-team/fptu-api/config"
-	"github.com/gosu-team/fptu-api/lib"
+	"webserver/config"
+	"webserver/lib"
 )
 
 // MediumURLs ...

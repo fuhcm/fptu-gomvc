@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gosu-team/fptu-api/lib"
+	"webserver/lib"
 )
 
 // APIInfo ...

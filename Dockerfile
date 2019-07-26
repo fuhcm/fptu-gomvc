@@ -1,7 +1,7 @@
 FROM golang:alpine as builder
 
-COPY . $GOPATH/src/github.com/gosu-team/fptu-api/
-WORKDIR $GOPATH/src/github.com/gosu-team/fptu-api/
+COPY . $GOPATH/src/webserver/
+WORKDIR $GOPATH/src/webserver/
 
 RUN touch .env
 
@@ -13,8 +13,8 @@ RUN apk --no-cache add ca-certificates rsync openssh
 
 WORKDIR /root/src/app
 
-COPY --from=builder /go/src/github.com/gosu-team/fptu-api/main /root/src/app/main
-COPY --from=builder /go/src/github.com/gosu-team/fptu-api/.env /root/src/app/.env
+COPY --from=builder /go/src/webserver/main /root/src/app/main
+COPY --from=builder /go/src/webserver/.env /root/src/app/.env
 
 EXPOSE 3000
 

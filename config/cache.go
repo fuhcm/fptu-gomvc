@@ -3,7 +3,7 @@ package config
 import (
 	"time"
 
-	"github.com/gosu-team/fptu-api/cache"
+	"webserver/cache"
 )
 
 // Create a cache

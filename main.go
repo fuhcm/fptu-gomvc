@@ -9,9 +9,9 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 
-	"github.com/gosu-team/fptu-api/config"
-	"github.com/gosu-team/fptu-api/models"
-	app "github.com/gosu-team/fptu-api/server"
+	"webserver/config"
+	"webserver/models"
+	app "webserver/server"
 )
 
 func main() {

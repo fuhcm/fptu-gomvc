@@ -5,8 +5,8 @@ import (
 	"sort"
 	"time"
 
-	"github.com/gosu-team/fptu-api/lib"
-	"github.com/gosu-team/fptu-api/models"
+	"webserver/lib"
+	"webserver/models"
 	"golang.org/x/crypto/bcrypt"
 )
 

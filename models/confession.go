@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/gosu-team/fptu-api/config"
+	"webserver/config"
 )
 
 // Confession ...

@@ -13,5 +13,5 @@ services:
     image: fptu-api-dev
     container_name: fptu-api-dev
     volumes:
-      - .:/root/src/app
+      - .:/root/src/go
     tty: true

@@ -1,6 +1,6 @@
-# Go REST API for FPTu.tech
+# Go REST API for FUHCM.com
 
-This repository is a skeleton for building production ready Golang REST API.
+This repository is a skeleton for building production ready Go REST API.
 
 In this repo, we used `gorilla/mux` with almost pure Go.
 

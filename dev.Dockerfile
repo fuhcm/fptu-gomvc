@@ -1,11 +1,16 @@
-FROM golang:alpine as builder
+FROM golang:alpine
+RUN apk add ca-certificates git
 
-COPY . $GOPATH/src/webserver/
-WORKDIR $GOPATH/src/webserver/
+RUN mkdir -p /root/src/go
+WORKDIR /root/src/go
+COPY go.mod go.sum ./
+RUN go mod download
 
-EXPOSE 3000
+COPY . .
 
-ENTRYPOINT ["go","run","cmd/app/main.go"]
+EXPOSE 5000
+
+ENTRYPOINT ["go","run","main.go"]
 
 # This is docker build command: 
 # docker build -f dev.Dockerfile -t fptu-api-dev .

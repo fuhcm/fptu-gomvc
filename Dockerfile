@@ -1,22 +1,24 @@
 FROM golang:alpine as builder
+RUN apk add ca-certificates git
 
-COPY . $GOPATH/src/webserver/
-WORKDIR $GOPATH/src/webserver/
+RUN mkdir -p /root/src/go
+WORKDIR /root/src/go
 
-RUN touch .env
+COPY go.mod go.sum ./
+RUN go mod download
 
+COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build main.go
 
 FROM alpine
 
-RUN apk --no-cache add ca-certificates rsync openssh
+RUN apk add ca-certificates rsync openssh
 
-WORKDIR /root/src/app
+WORKDIR /root/src/go
 
-COPY --from=builder /go/src/webserver/main /root/src/app/main
-COPY --from=builder /go/src/webserver/.env /root/src/app/.env
+COPY --from=builder /root/src/go/main /root/src/go/main
 
-EXPOSE 3000
+EXPOSE 5100
 
 ENTRYPOINT ["./main"]
 

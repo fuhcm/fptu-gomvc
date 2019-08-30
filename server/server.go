@@ -2,6 +2,7 @@ package app
 
 import (
 	"webserver/middlewares"
+
 	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/urfave/negroni"
 )
@@ -13,7 +14,7 @@ func NewServer() *negroni.Negroni {
 	server := negroni.New()
 	server.Use(gzip.Gzip(gzip.DefaultCompression))
 	server.Use(middlewares.CORSMiddleware())
-	server.Use(middlewares.SecureMiddleware())
+	// server.Use(middlewares.SecureMiddleware())
 	server.Use(middlewares.LogMiddleware())
 
 	// Attach app router

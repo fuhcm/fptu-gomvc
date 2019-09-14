@@ -68,6 +68,8 @@ func NewRouter() *mux.Router {
 	router.Methods("PUT").Path(apiPrefix + "/admincp/confessions/approve").Handler(privateRoute(controllers.ApproveConfessionHandler))
 	router.Methods("PUT").Path(apiPrefix + "/admincp/confessions/reject").Handler(privateRoute(controllers.RejectConfessionHandler))
 	router.Methods("GET").Path(apiPrefix + "/confessions/search").HandlerFunc(controllers.SearchConfessionsHandler)
+	router.Methods("GET").Path(apiPrefix + "/radios").Handler(privateRoute(controllers.GetRadio))
+	router.Methods("POST").Path(apiPrefix + "/radios").Handler(privateRoute(controllers.SetRadio))
 
 	// Crawl
 	router.Methods("GET").Path("/crawl/{name}").HandlerFunc(controllers.GetHomeFeedHandler)

@@ -7,9 +7,10 @@ import (
 	"strings"
 	"time"
 
-	jwt "github.com/dgrijalva/jwt-go"
 	"webserver/lib"
 	"webserver/models"
+
+	jwt "github.com/dgrijalva/jwt-go"
 	recaptcha "gopkg.in/ezzarghili/recaptcha-go.v2"
 )
 
@@ -270,4 +271,32 @@ func SyncPushIDHandler(w http.ResponseWriter, r *http.Request) {
 	confession.SyncPushID(jsonRequest.Sender, jsonRequest.PushID)
 
 	res.SendNoContent()
+}
+
+// RadioType ...
+type RadioType struct {
+	Radios string `json:"radios"`
+}
+
+// Radios ...
+var Radios RadioType
+
+// SetRadio ...
+func SetRadio(w http.ResponseWriter, r *http.Request) {
+	req := lib.Request{ResponseWriter: w, Request: r}
+	res := lib.Response{ResponseWriter: w}
+
+	radioRequest := new(RadioType)
+	req.GetJSONBody(radioRequest)
+
+	Radios.Radios = radioRequest.Radios
+
+	res.SendOK(radioRequest)
+}
+
+// GetRadio ...
+func GetRadio(w http.ResponseWriter, r *http.Request) {
+	res := lib.Response{ResponseWriter: w}
+
+	res.SendOK(Radios)
 }

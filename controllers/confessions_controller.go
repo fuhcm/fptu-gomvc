@@ -336,8 +336,7 @@ func GetRadio(w http.ResponseWriter, r *http.Request) {
 		logrus.Println(err.Error())
 	}
 
-	radiosObj := new(RadioType)
-	radiosObj.Radios = radios
+	radiosObj := RadioType{Radios: radios}
 
 	res.SendOK(radiosObj)
 }

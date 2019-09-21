@@ -1,0 +1,50 @@
+# github.com/auth0/go-jwt-middleware v0.0.0-20170425171159-5493cabe49f7
+github.com/auth0/go-jwt-middleware
+# github.com/dgrijalva/jwt-go v0.0.0-20180921172315-3af4c746e1c2
+github.com/dgrijalva/jwt-go
+# github.com/go-redis/redis v6.15.5+incompatible
+github.com/go-redis/redis
+github.com/go-redis/redis/internal
+github.com/go-redis/redis/internal/consistenthash
+github.com/go-redis/redis/internal/hashtag
+github.com/go-redis/redis/internal/pool
+github.com/go-redis/redis/internal/proto
+github.com/go-redis/redis/internal/util
+# github.com/go-sql-driver/mysql v0.0.0-20190127011111-1b9eda25029c
+github.com/go-sql-driver/mysql
+# github.com/gorilla/mux v0.0.0-20190228181203-15a353a63672
+github.com/gorilla/mux
+# github.com/gorilla/websocket v0.0.0-20190427040306-80c2d40e9b91
+github.com/gorilla/websocket
+# github.com/jinzhu/gorm v1.9.2
+github.com/jinzhu/gorm/dialects/mysql
+github.com/jinzhu/gorm
+# github.com/jinzhu/inflection v0.0.0-20180308033659-04140366298a
+github.com/jinzhu/inflection
+# github.com/joho/godotenv v0.0.0-20180927053203-c0b86d615e06
+github.com/joho/godotenv
+# github.com/konsorten/go-windows-terminal-sequences v1.0.2
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/meatballhat/negroni-logrus v0.0.0-20170801195057-31067281800f
+github.com/meatballhat/negroni-logrus
+# github.com/phyber/negroni-gzip v0.0.0-20180113114010-ef6356a5d029
+github.com/phyber/negroni-gzip/gzip
+# github.com/rs/cors v0.0.0-20181011182759-a3460e445dd3
+github.com/rs/cors
+# github.com/sirupsen/logrus v0.0.0-20181103062819-44067abb194b
+github.com/sirupsen/logrus
+# github.com/unrolled/secure v0.0.0-20181022170031-4b6b7cf51606
+github.com/unrolled/secure
+# github.com/urfave/negroni v0.0.0-20181104104510-0af0d913cfc4
+github.com/urfave/negroni
+# golang.org/x/crypto v0.0.0-20190605123033-f99c8df09eb5
+golang.org/x/crypto/bcrypt
+golang.org/x/crypto/ssh/terminal
+golang.org/x/crypto/blowfish
+# golang.org/x/sys v0.0.0-20190606165138-5da285871e9c
+golang.org/x/sys/unix
+golang.org/x/sys/windows
+# google.golang.org/appengine v1.6.3
+google.golang.org/appengine/cloudsql
+# gopkg.in/ezzarghili/recaptcha-go.v2 v2.0.2
+gopkg.in/ezzarghili/recaptcha-go.v2

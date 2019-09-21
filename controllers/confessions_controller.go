@@ -283,7 +283,9 @@ type RadioType struct {
 // GetRedisClient ...
 func GetRedisClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
-		Network: os.Getenv("REDIS_URL"),
+		Addr:     os.Getenv("REDIS_HOST"),
+		Password: os.Getenv("REDIS_PASSWORD"), // no password set
+		DB:       0,                           // use default DB
 	})
 }
 
@@ -331,12 +333,12 @@ func SetRadio(w http.ResponseWriter, r *http.Request) {
 func GetRadio(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
 
-	radios, err := RedisRead("radios")
+	value, err := RedisRead("radios")
 	if err != nil {
 		logrus.Println(err.Error())
 	}
 
-	radiosObj := RadioType{Radios: radios}
+	radiosObj := RadioType{Radios: value}
 
 	res.SendOK(radiosObj)
 }

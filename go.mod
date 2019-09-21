@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/auth0/go-jwt-middleware v0.0.0-20170425171159-5493cabe49f7
 	github.com/dgrijalva/jwt-go v0.0.0-20180921172315-3af4c746e1c2
+	github.com/go-redis/redis v6.15.5+incompatible
 	github.com/go-sql-driver/mysql v0.0.0-20190127011111-1b9eda25029c
 	github.com/gorilla/mux v0.0.0-20190228181203-15a353a63672
 	github.com/gorilla/websocket v0.0.0-20190427040306-80c2d40e9b91
@@ -15,6 +16,8 @@ require (
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/meatballhat/negroni-logrus v0.0.0-20170801195057-31067281800f
+	github.com/onsi/ginkgo v1.10.1 // indirect
+	github.com/onsi/gomega v1.7.0 // indirect
 	github.com/phyber/negroni-gzip v0.0.0-20180113114010-ef6356a5d029
 	github.com/rs/cors v0.0.0-20181011182759-a3460e445dd3
 	github.com/sirupsen/logrus v0.0.0-20181103062819-44067abb194b

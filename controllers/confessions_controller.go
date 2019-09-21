@@ -11,6 +11,8 @@ import (
 	"webserver/models"
 
 	jwt "github.com/dgrijalva/jwt-go"
+	"github.com/go-redis/redis"
+	"github.com/sirupsen/logrus"
 	recaptcha "gopkg.in/ezzarghili/recaptcha-go.v2"
 )
 
@@ -278,8 +280,36 @@ type RadioType struct {
 	Radios string `json:"radios"`
 }
 
-// Radios ...
-var Radios RadioType
+// GetRedisClient ...
+func GetRedisClient() *redis.Client {
+	return redis.NewClient(&redis.Options{
+		Network: os.Getenv("REDIS_URL"),
+	})
+}
+
+// RedisRead ...
+func RedisRead(key string) (string, error) {
+	client := GetRedisClient()
+
+	val, err := client.Get(key).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return val, nil
+}
+
+// RedisWrite ...
+func RedisWrite(key string, value string) error {
+	client := GetRedisClient()
+
+	err := client.Set(key, value, 0).Err()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 // SetRadio ...
 func SetRadio(w http.ResponseWriter, r *http.Request) {
@@ -289,7 +319,10 @@ func SetRadio(w http.ResponseWriter, r *http.Request) {
 	radioRequest := new(RadioType)
 	req.GetJSONBody(radioRequest)
 
-	Radios.Radios = radioRequest.Radios
+	err := RedisWrite("radios", radioRequest.Radios)
+	if err != nil {
+		logrus.Println(err.Error())
+	}
 
 	res.SendOK(radioRequest)
 }
@@ -298,5 +331,13 @@ func SetRadio(w http.ResponseWriter, r *http.Request) {
 func GetRadio(w http.ResponseWriter, r *http.Request) {
 	res := lib.Response{ResponseWriter: w}
 
-	res.SendOK(Radios)
+	radios, err := RedisRead("radios")
+	if err != nil {
+		logrus.Println(err.Error())
+	}
+
+	radiosObj := new(RadioType)
+	radiosObj.Radios = radios
+
+	res.SendOK(radiosObj)
 }

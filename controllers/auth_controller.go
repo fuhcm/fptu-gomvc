@@ -7,9 +7,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"webserver/lib"
 	"webserver/models"
+
+	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -72,6 +73,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	claims := &jwt.StandardClaims{
 		ExpiresAt: expireTime,
 		Id:        strconv.Itoa(user.ID),
+		Subject:   user.Admin,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
